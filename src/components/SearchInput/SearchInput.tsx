@@ -13,13 +13,11 @@ const SearchInput: React.FC<SearchInputProps> = ({ medicines, onSearch, onSelect
   const [suggestions, setSuggestions] = useState<Medicine[]>([])
   const [showDropdown, setShowDropdown] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
-  const [isSearchTriggered, setIsSearchTriggered] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const handleSearch = () => {
     if (query.trim()) {
-      setIsSearchTriggered(true);
       onSearch(query.trim(), true);
       setShowDropdown(false);
     }
@@ -30,7 +28,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ medicines, onSearch, onSelect
     onSelect(medicine);
     setShowDropdown(false);
     inputRef.current?.focus();
-    setIsSearchTriggered(true);
     onSearch(medicine.name, true);  // Trigger search when selecting a suggestion
   }
 
@@ -124,7 +121,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ medicines, onSearch, onSelect
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
     setQuery(newValue)
-    setIsSearchTriggered(false)
     onSearch(newValue, false) // Update query without triggering search state
   }
 

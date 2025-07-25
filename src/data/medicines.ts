@@ -9,6 +9,12 @@ export interface Medicine {
   sideEffects?: string[];
   price: number;
   inStock?: boolean;
+  strength?: string;
+  dosageForm?: string;
+  packageSize?: string;
+  uppScope?: boolean;
+  includedInThiqa?: boolean;
+  includedInBasic?: boolean;
 }
 
 export const medicines: Medicine[] = [

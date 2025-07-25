@@ -1,5 +1,5 @@
 import React from 'react';
-import { DollarSign, Info } from 'lucide-react';
+import { DollarSign } from 'lucide-react';
 import type { Medicine } from '../utils/csvParser';
 import styles from './MedicineListItem.module.css';
 
