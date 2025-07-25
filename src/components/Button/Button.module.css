@@ -1,0 +1,63 @@
+.button {
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-size: 1em;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.button:focus,
+.button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Variants */
+.primary {
+  background-color: #1a1a1a;
+  color: rgba(255, 255, 255, 0.87);
+  border: 1px solid transparent;
+}
+
+.primary:hover {
+  border-color: #646cff;
+}
+
+.secondary {
+  background-color: transparent;
+  color: #646cff;
+  border: 1px solid #646cff;
+}
+
+.secondary:hover {
+  background-color: #646cff;
+  color: white;
+}
+
+/* Sizes */
+.small {
+  padding: 0.5em 1em;
+  font-size: 0.875em;
+}
+
+.medium {
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+}
+
+.large {
+  padding: 0.8em 1.6em;
+  font-size: 1.125em;
+}
+
+@media (prefers-color-scheme: light) {
+  .primary {
+    background-color: #f9f9f9;
+    color: #213547;
+  }
+}

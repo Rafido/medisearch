@@ -1,0 +1,212 @@
+import React, { useState, useEffect, useRef } from 'react'
+import type { Medicine } from '../../services/medicineService';
+import styles from './SearchInput.module.css'
+
+interface SearchInputProps {
+  medicines: Medicine[]
+  onSearch: (query: string) => void
+  onSelect: (medicine: Medicine) => void
+}
+
+const SearchInput: React.FC<SearchInputProps> = ({ medicines, onSearch, onSelect }) => {
+  const [query, setQuery] = useState('')
+  const [suggestions, setSuggestions] = useState<Medicine[]>([])
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showDropdown) {
+      if (e.key === 'Enter' && query.trim()) {
+        e.preventDefault();
+        handleSearch();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex(prev => 
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex(prev => 
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        );
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+          handleSelectSuggestion(suggestions[selectedIndex]);
+        } else {
+          handleSearch();
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        setShowDropdown(false);
+        setSelectedIndex(-1);
+        break;
+    }
+  }
+
+  useEffect(() => {
+    if (query.length > 0) {
+      const filtered = medicines.filter(medicine =>
+        medicine.brandName.toLowerCase().includes(query.toLowerCase()) ||
+        medicine.genericName.toLowerCase().includes(query.toLowerCase()) ||
+        medicine.category.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 8) // Limit to 8 suggestions
+      
+      setSuggestions(filtered)
+      setShowDropdown(filtered.length > 0)
+    } else {
+      setSuggestions([])
+      setShowDropdown(false)
+    }
+    setSelectedIndex(-1)
+  }, [query, medicines])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showDropdown) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex(prev => 
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex(prev => prev > 0 ? prev - 1 : prev);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+          handleSelectSuggestion(suggestions[selectedIndex]);
+        } else {
+          handleSearch();
+        }
+        break;
+      case 'Escape':
+        setShowDropdown(false);
+        setSelectedIndex(-1);
+        break;
+    }
+        break
+      case 'Escape':
+        setShowDropdown(false)
+        setSelectedIndex(-1)
+        break
+    }
+  }
+
+  const handleSelectSuggestion = (medicine: Medicine) => {
+    setQuery(medicine.brandName)
+    setShowDropdown(false)
+    setSelectedIndex(-1)
+    onSelect(medicine)
+  }
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      onSearch(query.trim())
+      setShowDropdown(false)
+    }
+  }
+
+  const highlightMatch = (text: string, query: string) => {
+    if (!query) return text
+    
+    const regex = new RegExp(`(${query})`, 'gi')
+    const parts = text.split(regex)
+    
+    return parts.map((part, index) =>
+      regex.test(part) ? (
+        <span key={index} className={styles.highlight}>{part}</span>
+      ) : (
+        part
+      )
+    )
+  }
+
+  return (
+    <div className={styles.searchContainer} ref={dropdownRef}>
+      <div className={styles.inputWrapper}>
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Search by brand name, generic name, or drug code..."
+          className={styles.searchInput}
+        />
+        <button 
+          onClick={handleSearch}
+          className={styles.searchButton}
+          disabled={!query.trim()}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18L20.29 21.71A1 1 0 0 0 21.71 20.29ZM11 18A7 7 0 1 1 18 11A7 7 0 0 1 11 18Z"/>
+          </svg>
+        </button>
+      </div>
+      
+      {showDropdown && (
+        <div className={styles.dropdown}>
+          {suggestions.map((medicine, index) => (
+            <div
+              key={medicine.drugCode}
+              className={`${styles.suggestionItem} ${
+                index === selectedIndex ? styles.selected : ''
+              }`}
+              onClick={() => handleSelectSuggestion(medicine)}
+            >
+              <div className={styles.medicineInfo}>
+                <div className={styles.medicineName}>
+                  {highlightMatch(medicine.brandName, query)}
+                </div>
+                <div className={styles.medicineGeneric}>
+                  {highlightMatch(medicine.genericName, query)} • {medicine.category}
+                </div>
+                <div className={styles.medicineDetails}>
+                  ${medicine.price.toFixed(2)} • {medicine.strength} {medicine.dosageForm}
+                </div>
+              </div>
+              <div className={styles.statusBadges}>
+                <span className={`${styles.stockBadge} ${medicine.inStock ? styles.inStock : styles.outOfStock}`}>
+                  {medicine.inStock ? 'In Stock' : 'Out of Stock'}
+                </span>
+                {medicine.isUpp && <span className={styles.uppBadge}>UPP</span>}
+                {medicine.isThiqa && <span className={styles.thiqaBadge}>Thiqa</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default SearchInput

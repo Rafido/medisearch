@@ -1,0 +1,209 @@
+.medicineDetails {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.medicineHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.medicineHeader h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.75rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #7f8c8d;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: #e74c3c;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.detailItem {
+  margin-bottom: 1rem;
+}
+
+.detailLabel {
+  display: block;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-bottom: 0.25rem;
+}
+
+.detailValue {
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.priceValue {
+  color: #27ae60;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.coverageBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.coverageBadges span {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.uppBadge {
+  background-color: #e8f4fd;
+  color: #2980b9;
+}
+
+.thiqaBadge {
+  background-color: #f0f7ee;
+  color: #27ae60;
+}
+
+.basicBadge {
+  background-color: #fef5e7;
+  color: #f39c12;
+}
+
+.noCoverage {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.availabilityBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.inStock {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.outOfStock {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.descriptionSection {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.descriptionSection h3 {
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.descriptionContent {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+.descriptionText {
+  margin: 0.5rem 0;
+}
+
+.descriptionText:first-child {
+  margin-top: 0;
+}
+
+.descriptionText:last-child {
+  margin-bottom: 0;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.backButton,
+.printButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backButton {
+  background-color: #f5f5f5;
+  color: #2c3e50;
+}
+
+.backButton:hover {
+  background-color: #e0e0e0;
+}
+
+.printButton {
+  background-color: #3498db;
+  color: white;
+}
+
+.printButton:hover {
+  background-color: #2980b9;
+}
+
+/* Print styles */
+@media print {
+  .actionButtons {
+    display: none;
+  }
+  
+  .medicineDetails {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .closeButton {
+    display: none;
+  }
+}

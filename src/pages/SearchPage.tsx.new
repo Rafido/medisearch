@@ -1,0 +1,320 @@
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useMedicines } from '../hooks/useMedicines';
+import { useDebounce } from '../hooks/useDebounce';
+import type { Medicine } from '../data/medicines';
+import Header from '../components/Header';
+import styles from './SearchPage.module.css';
+import { Keyboard, Database, Grid, List } from 'lucide-react';
+import MedicineCard from '../components/MedicineCard/MedicineCard';
+
+const SearchPage = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isSearchTriggered, setIsSearchTriggered] = useState(false);
+  const debouncedSearchQuery = useDebounce(searchQuery, 150); // Quick debounce for suggestions
+  const debouncedActiveSearch = useDebounce(searchQuery, 1000); // Longer debounce for search
+  const { medicines, isLoading, error } = useMedicines() as { 
+    medicines: Medicine[]; 
+    isLoading: boolean; 
+    error: Error | null 
+  };
+  const [filteredMedicines, setFilteredMedicines] = useState<Medicine[]>([]);
+  const [suggestions, setSuggestions] = useState<Medicine[]>([]);
+  const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+  
+  // Mock user state - in a real app, this would come from an auth context/provider
+  const [user, setUser] = useState<{ name: string; email: string; avatar?: string } | null>({
+    name: 'Dr. Sarah Ahmed',
+    email: 'sarah.ahmed@health.ae',
+  });
+
+  // Define handleSuggestionClick early using useCallback
+  const handleSuggestionClick = useCallback((medicine: Medicine) => {
+    const query = medicine.name;
+    setSearchQuery(query);
+    setActiveSearch(query);
+    setShowSuggestions(false);
+    setSelectedMedicine(medicine);
+    setIsSearchTriggered(true);
+  }, []);
+  
+  // Handle suggestions
+  useEffect(() => {
+    if (!medicines.length) return;
+    
+    if (!debouncedSearchQuery.trim()) {
+      setSuggestions([]);
+      return;
+    }
+    
+    const query = debouncedSearchQuery.toLowerCase().trim();
+    const filtered = medicines.filter(medicine => 
+      medicine.name.toLowerCase().includes(query) ||
+      medicine.genericName.toLowerCase().includes(query) ||
+      (medicine.category?.toLowerCase().includes(query) ?? false)
+    );
+    
+    // Show first 5 matches as suggestions while typing
+    setSuggestions(filtered.slice(0, 5));
+  }, [debouncedSearchQuery, medicines]);
+
+  // Handle actual search
+  useEffect(() => {
+    if (!medicines.length || !isSearchTriggered) {
+      setFilteredMedicines([]);
+      return;
+    }
+    
+    const query = activeSearch.toLowerCase().trim();
+    const filtered = medicines.filter(medicine => 
+      medicine.name.toLowerCase().includes(query) ||
+      medicine.genericName.toLowerCase().includes(query) ||
+      (medicine.category?.toLowerCase().includes(query) ?? false)
+    );
+    
+    setFilteredMedicines(filtered);
+  }, [activeSearch, medicines, isSearchTriggered]);
+
+  // Handle clicks outside suggestions
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  // Clear search and reset selection
+  const handleClearSearch = useCallback(() => {
+    setSearchQuery('');
+    setActiveSearch('');
+    setSelectedMedicine(null);
+    setShowSuggestions(false);
+    setIsSearchTriggered(false);
+  }, []);
+  
+  // Handle authentication
+  const handleSignIn = useCallback(() => {
+    setUser({
+      name: 'Dr. Sarah Ahmed',
+      email: 'sarah.ahmed@health.ae'
+    });
+  }, []);
+  
+  const handleSignOut = useCallback(() => {
+    setUser(null);
+    setSearchQuery('');
+    setSelectedMedicine(null);
+  }, []);
+  
+  // Focus search input on mount
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
+
+  // Show loading indicator when search is in progress
+  const isSearching = useMemo(() => {
+    return searchQuery !== debouncedSearchQuery;
+  }, [searchQuery, debouncedSearchQuery]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.loading}>
+        <p>Loading medicines...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    const errorMessage = 'An error occurred while loading medicines. Please try again later.';
+      
+    return (
+      <div className={styles.error}>
+        <p>{errorMessage}</p>
+        <button 
+          className={styles.retryButton}
+          onClick={() => window.location.reload()}
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <Header 
+        user={user}
+        onSignIn={handleSignIn}
+        onSignOut={handleSignOut}
+      />
+      
+      <div className={styles.mainContent}>
+        <header className={`${styles.searchHeader} ${activeSearch ? styles.searching : ''}`}>
+          {!activeSearch && (
+            <>
+              <h1>💊 Medicine Search</h1>
+              <p className={styles.headerSubtitle}>Find medicines in the UAE formulary database</p>
+            </>
+          )}
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              setShowSuggestions(false);
+              setActiveSearch(searchQuery);
+              setIsSearchTriggered(true);
+            }} 
+            className={styles.searchForm}
+          >
+            <div className={styles.searchInputContainer}>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => setShowSuggestions(true)}
+                placeholder="Search by drug name, generic name, or category"
+                className={styles.searchInput}
+                autoFocus
+                aria-label="Search medicines"
+                aria-describedby="search-hint"
+                autoComplete="off"
+              />
+              {searchQuery && (
+                <button 
+                  type="button" 
+                  className={styles.clearButton}
+                  onClick={handleClearSearch}
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+              {showSuggestions && suggestions.length > 0 && (
+                <div ref={suggestionsRef} className={styles.suggestions}>
+                  {suggestions.map((medicine) => (
+                    <div
+                      key={medicine.id}
+                      className={`${styles.suggestionItem} ${selectedMedicine?.id === medicine.id ? styles.selected : ''}`}
+                      onClick={() => handleSuggestionClick(medicine)}
+                    >
+                      <span className={styles.suggestionTitle}>{medicine.name}</span>
+                      <span className={styles.suggestionSubtitle}>{medicine.genericName}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button 
+              type="submit" 
+              className={`${styles.searchButton} ${isLoading || isSearching ? styles.searchButtonLoading : ''}`}
+              disabled={isLoading || isSearching}
+              aria-busy={isLoading || isSearching}
+            >
+              Search
+            </button>
+          </form>
+        </header>
+
+        <main className={styles.searchResults}>
+          {/* Results View Mode Toggle */}
+          {filteredMedicines.length > 0 && (
+            <div className={styles.viewModeToggle}>
+              <button
+                className={`${styles.viewModeButton} ${viewMode === 'grid' ? styles.active : ''}`}
+                onClick={() => setViewMode('grid')}
+                aria-label="Grid view"
+              >
+                <Grid size={18} />
+              </button>
+              <button
+                className={`${styles.viewModeButton} ${viewMode === 'list' ? styles.active : ''}`}
+                onClick={() => setViewMode('list')}
+                aria-label="List view"
+              >
+                <List size={18} />
+              </button>
+            </div>
+          )}
+
+          {/* Search Results */}
+          {isSearchTriggered && (
+            <div className={`${styles.resultsContainer} ${styles[viewMode]}`}>
+              {filteredMedicines.length > 0 ? (
+                <>
+                  <p className={styles.resultCount}>Found {filteredMedicines.length} medicines</p>
+                  <div className={`${styles.medicineGrid} ${styles[viewMode]}`}>
+                    {filteredMedicines.map((medicine) => (
+                      <MedicineCard
+                        key={medicine.id}
+                        medicine={medicine}
+                        viewMode={viewMode}
+                        isSelected={selectedMedicine?.id === medicine.id}
+                        onClick={() => handleSuggestionClick(medicine)}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className={styles.noResults}>
+                  <p>No medicines found matching your search.</p>
+                  <button 
+                    onClick={handleClearSearch}
+                    className={styles.clearSearchButton}
+                  >
+                    Clear Search
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Medicine Details */}
+          {selectedMedicine && (
+            <div id="medicine-details" className={styles.medicineDetails}>
+              <h2>{selectedMedicine.name}</h2>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Generic Name:</span>
+                <span>{selectedMedicine.genericName}</span>
+              </div>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Category:</span>
+                <span>{selectedMedicine.category || 'N/A'}</span>
+              </div>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Manufacturer:</span>
+                <span>{selectedMedicine.manufacturer || 'N/A'}</span>
+              </div>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Dosage:</span>
+                <span>{selectedMedicine.dosage || 'N/A'}</span>
+              </div>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Price:</span>
+                <span>{selectedMedicine.price.toFixed(2)} AED</span>
+              </div>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Description:</span>
+                <span>{selectedMedicine.description || 'No description available'}</span>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default SearchPage;

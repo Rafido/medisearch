@@ -1,0 +1,194 @@
+/* Medicine Card Styles - Improved Spacing Version */
+.medicineCard {
+  background: var(--surface-color);
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.medicineCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-color);
+  border-width: 2px;
+}
+
+/* Labels Container - Better positioned */
+.labelsContainer {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 3px;
+  z-index: 2;
+}
+
+.label {
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: var(--font-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.uppLabel {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.thiqaLabel {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.basicLabel {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+/* Card Content - Better spacing */
+.cardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.medicineName {
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2em;
+}
+
+.genericName {
+  font-family: var(--font-secondary);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Medicine Details - Better spaced rows */
+.medicineDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-family: var(--font-secondary);
+}
+
+.detailLabel {
+  font-weight: 500;
+  min-width: 50px;
+  font-size: 0.65rem;
+}
+
+.detailValue {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+.dosageForm {
+  background: var(--accent-light);
+  color: var(--primary-color);
+  padding: 1px 4px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+}
+
+/* Price Section - Better spacing */
+.priceSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.priceContainer svg {
+  color: var(--success-color);
+}
+
+.price {
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--success-color);
+}
+
+.inStock {
+  background: var(--success-light);
+  color: var(--success-color);
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: var(--font-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .medicineCard {
+    padding: 10px;
+  }
+  
+  .medicineName {
+    font-size: 0.8rem;
+  }
+  
+  .genericName {
+    font-size: 0.7rem;
+  }
+  
+  .labelsContainer {
+    top: 5px;
+    right: 5px;
+  }
+  
+  .label {
+    padding: 2px 5px;
+    font-size: 0.65rem;
+  }
+}
