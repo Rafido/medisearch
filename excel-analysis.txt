@@ -1,0 +1,124 @@
+📊 EXCEL FILE ANALYSIS
+==================================================
+📋 Sheet Names:
+  1. Version
+  2. Drugs
+
+🎯 DETAILED ANALYSIS OF "Drugs" SHEET
+==================================================
+📊 Total Records: 17354
+
+�️  Available Fields:
+  1. Drug Code
+  2. Greenrain Code
+  3. Insurance Plan
+  4. Package Name
+  5. Generic Code
+  6. Generic Name
+  7. Strength
+  8. Dosage Form
+  9. Package Size
+  10. Dispense Mode
+  11. Package Price to Public
+  12. Package Price to Pharmacy
+  13. Unit Price to Public
+  14. Unit Price to Pharmacy
+  15. Status
+  16. Delete Effective Date
+  17. Last Change Date
+  18. Agent Name
+  19. Manufacturer Name
+
+📋 First Record Sample:
+{
+  "Drug Code": "D98-2596-00001-01",
+  "Greenrain Code": "2077-5530-001",
+  "Insurance Plan": "NA",
+  "Package Name": "IRICAR",
+  "Generic Code": "00001",
+  "Generic Name": "(Homeopathy)",
+  "Strength": "Combination",
+  "Dosage Form": "Cream",
+  "Package Size": "50g",
+  "Dispense Mode": "",
+  "Package Price to Public": 48,
+  "Package Price to Pharmacy": 36,
+  "Unit Price to Public": 48,
+  "Unit Price to Pharmacy": 36,
+  "Status": "Active",
+  "Delete Effective Date": "",
+  "Last Change Date": 42529,
+  "Agent Name": "Ultra Medical Store (Ultramed)",
+  "Manufacturer Name": "Deutsche Homoopathie Union, GERMANY"
+}
+
+� Additional Sample Records:
+Record 2:
+{
+  "Drug Code": "C59-4936-00002-01",
+  "Greenrain Code": "2089-6659-001",
+  "Insurance Plan": "NA",
+  "Package Name": "SPASCUPREEL S",
+  "Generic Code": "00002",
+  "Generic Name": "(Homeopathy)",
+  "Strength": "Combination",
+  "Dosage Form": "Rectal Suppositories",
+  "Package Size": "12 Suppositories",
+  "Dispense Mode": "",
+  "Package Price to Public": 40,
+  "Package Price to Pharmacy": 30,
+  "Unit Price to Public": 3.33,
+  "Unit Price to Pharmacy": 2.5,
+  "Status": "Active",
+  "Delete Effective Date": "",
+  "Last Change Date": 41129,
+  "Agent Name": "The Polarizer for Medical & Chemical Supplies",
+  "Manufacturer Name": "Biologische Helmitterl Heel GmbH, GERMANY"
+}
+
+Record 3:
+{
+  "Drug Code": "G32-4388-00003-01",
+  "Greenrain Code": "2411-6841-001",
+  "Insurance Plan": "NA",
+  "Package Name": "PULMO HEVERT",
+  "Generic Code": "00003",
+  "Generic Name": "(Homeopathy)",
+  "Strength": "Combination",
+  "Dosage Form": "Tablets",
+  "Package Size": "40 Tablets",
+  "Dispense Mode": "",
+  "Package Price to Public": 35,
+  "Package Price to Pharmacy": 26.25,
+  "Unit Price to Public": 0.88,
+  "Unit Price to Pharmacy": 0.66,
+  "Status": "Active",
+  "Delete Effective Date": "",
+  "Last Change Date": 41346,
+  "Agent Name": "Ultra Medical Store (Ultramed)",
+  "Manufacturer Name": "Hevert-Arzneimittel GmbH & Co. KG, GERMANY"
+}
+
+Record 4:
+{
+  "Drug Code": "C59-2264-00003-01",
+  "Greenrain Code": "2089-6655-001",
+  "Insurance Plan": "NA",
+  "Package Name": "GRIPP-HEEL",
+  "Generic Code": "00003",
+  "Generic Name": "(Homeopathy)",
+  "Strength": "Combination",
+  "Dosage Form": "Tablets",
+  "Package Size": "50 Tablets Plastic Bottle",
+  "Dispense Mode": "",
+  "Package Price to Public": 42,
+  "Package Price to Pharmacy": 33,
+  "Unit Price to Public": 0.84,
+  "Unit Price to Pharmacy": 0.66,
+  "Status": "Active",
+  "Delete Effective Date": "",
+  "Last Change Date": 41129,
+  "Agent Name": "The Polarizer for Medical & Chemical Supplies",
+  "Manufacturer Name": "Biologische Helmitterl Heel GmbH, GERMANY"
+}
+

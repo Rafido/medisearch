@@ -880,18 +880,34 @@
   }
 }
 
+/* Enhanced Mobile Search Experience */
 @media (max-width: 768px) {
   .mainContent {
-    padding: 1rem 0;
+    padding: 0.5rem 0;
   }
   
   .heroSection {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  .heroTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
   
   .heroFeatures {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .heroFeature {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
   }
   
   .searchSection {
@@ -903,27 +919,213 @@
     border-radius: 16px;
   }
   
-  .searchActions {
-    flex-direction: column;
+  .searchTitle {
+    font-size: 1.5rem;
+  }
+  
+  .searchDescription {
+    font-size: 1rem;
+  }
+  
+  .searchInputWrapper {
+    min-height: 56px;
+  }
+  
+  .searchInput {
+    padding: 1rem 180px 1rem 3rem;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .searchButtonsContainer {
+    max-width: 160px;
   }
   
   .searchButton,
   .clearButton {
-    width: auto;
+    height: 40px;
+    font-size: 0.8rem;
     min-width: 70px;
-    height: 32px;
-    font-size: 0.75rem;
-    padding: 0 0.5rem;
   }
   
-  .resultsHeader {
+  .searchButton {
+    padding: 0 1rem;
+  }
+  
+  .clearButton {
+    padding: 0 0.75rem;
+  }
+  
+  /* Mobile suggestions */
+  .suggestionsDropdown {
+    max-height: 250px;
+    font-size: 0.9rem;
+  }
+  
+  .suggestionItem {
+    padding: 0.875rem 1rem;
+  }
+  
+  .suggestionName {
+    font-size: 0.9rem;
+  }
+  
+  .suggestionGeneric {
+    font-size: 0.8rem;
+  }
+  
+  /* Mobile filters */
+  .filtersContainer {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+  
+  .filterGroup {
+    width: 100%;
+  }
+  
+  .filterSelect {
+    width: 100%;
+    min-width: unset;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .activeFiltersChips {
+    justify-content: center;
+  }
+  
+  .filterChip {
+    font-size: 0.8rem;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  /* Mobile search results */
+  .searchResultsHeader {
     flex-direction: column;
     gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .headerLeft {
     text-align: center;
   }
   
-  .resultsGrid {
+  .searchResultsTitle h2 {
+    font-size: 1.25rem;
+  }
+  
+  .resultsCount {
+    font-size: 0.875rem;
+  }
+  
+  .headerRight {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .filtersSection {
+    order: 1;
+  }
+  
+  .viewModeSelector {
+    order: 2;
+    align-self: center;
+  }
+  
+  /* Mobile medicine grid */
+  .medicineGrid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  /* Mobile welcome screen */
+  .welcomeScreen {
+    padding: 1.5rem 1rem;
+  }
+  
+  .welcomeTitle {
+    font-size: 1.75rem;
+  }
+  
+  .welcomeDescription {
+    font-size: 1rem;
+  }
+  
+  .quickStats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .statItem {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.75rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 0.95rem;
+  }
+  
+  .searchContainer {
+    padding: 1rem;
+  }
+  
+  .searchTitle {
+    font-size: 1.25rem;
+  }
+  
+  .searchInput {
+    padding: 0.875rem 150px 0.875rem 2.5rem;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .searchButtonsContainer {
+    max-width: 130px;
+    gap: 0.25rem;
+  }
+  
+  .searchButton,
+  .clearButton {
+    height: 36px;
+    font-size: 0.75rem;
+    min-width: 60px;
+  }
+  
+  .searchButton {
+    padding: 0 0.75rem;
+  }
+  
+  .clearButton {
+    padding: 0 0.5rem;
+  }
+  
+  .closeButton {
+    padding: 0.5rem;
+  }
+  
+  .searchResultsTitle h2 {
+    font-size: 1.125rem;
+  }
+  
+  .medicineGrid {
+    padding: 0 0.25rem;
+  }
+  
+  .welcomeTitle {
+    font-size: 1.5rem;
+  }
+  
+  .quickStats {
+    gap: 0.75rem;
   }
 }
 
@@ -3169,12 +3371,13 @@ h1 {
   margin-bottom: 2rem;
 }
 
-/* Medicine Grid - Compact for more items */
+/* Medicine Grid - Compact for maximum visibility */
 .medicineGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  padding: 0 8px;
 }
 
 .medicineCard {
@@ -4151,8 +4354,8 @@ h1 {
   }
   
   .medicineGrid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
   }
   
   .welcomeMessage {
@@ -4908,11 +5111,19 @@ h1 {
   border-bottom: 1px solid var(--border-color);
   padding: 1rem 1.5rem;
   display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+}
+
+/* Main header row with title and controls */
+.headerMainRow {
+  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  z-index: 10;
+  width: 100%;
 }
 
 .headerLeft {
@@ -4920,6 +5131,36 @@ h1 {
   align-items: center;
   gap: 1rem;
   flex: 1;
+  min-width: 0; /* Allow text truncation */
+}
+
+.searchResultsTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0; /* Allow text truncation */
+}
+
+.searchResultsTitle h2 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem; /* Reduced from 1.25rem for single line */
+  margin: 0;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px; /* Limit width to prevent overflow */
+}
+
+.resultsCount {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.825rem; /* Reduced from 0.875rem */
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .closeButton {
@@ -4962,7 +5203,187 @@ h1 {
 .headerRight {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem; /* Reduced gap for compact layout */
+  flex-shrink: 0;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Inline Filters - Always display in single line on desktop */
+.inlineFilters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inlineFilterSelect {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 8px; /* Reduced padding for compactness */
+  font-size: 0.8rem; /* Smaller font size */
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  min-width: 100px; /* Reduced from 120px */
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.inlineFilterSelect:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.15);
+}
+
+.inlineFilterSelect:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Filter Styles */
+.dosageFormFilter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 16px;
+}
+
+.distributorFilter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 16px;
+}
+
+.filterIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.dosageFormSelect,
+.distributorSelect {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.875rem;
+  color: #374151;
+  min-width: 120px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dosageFormSelect:hover,
+.distributorSelect:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dosageFormSelect:focus,
+.distributorSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Active Filters Display */
+.activeFilters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.activeFiltersLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.activeFilterTag {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.removeFilterButton {
+  background: none;
+  border: none;
+  color: #1e40af;
+  cursor: pointer;
+  font-size: 0.875rem;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.removeFilterButton:hover {
+  background: rgba(30, 64, 175, 0.1);
+}
+
+.clearAllFiltersButton {
+  background: #f87171;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.clearAllFiltersButton:hover {
+  background: #ef4444;
+}
+
+/* Responsive filters */
+@media (max-width: 768px) {
+  .filtersContainer {
+    width: 100%;
+  }
+  
+  .filtersRow {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1rem;
+  }
+  
+  .filterGroup {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .filterSelect {
+    width: 100%;
+    font-size: 0.8rem;
+  }
+  
+  .activeFilters {
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .activeFilterTag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
 }
 
 /* View Mode Selector in Header */
@@ -5013,26 +5434,27 @@ h1 {
   display: none;
 }
 
-/* Ultra compact medicine grid for full screen */
+/* Beautiful medicine grid for full screen */
 .searchResultsContent .medicineContainer.gridView .medicineGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  padding: 0;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .searchResultsContent .medicineContainer.listView .medicineList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 0;
+  gap: 12px;
+  padding: 20px;
 }
 
 /* Responsive adjustments for full screen view */
 @media (max-width: 1200px) {
   .searchResultsContent .medicineContainer.gridView .medicineGrid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.875rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    padding: 16px;
   }
 }
 
@@ -5055,12 +5477,21 @@ h1 {
   }
   
   .searchResultsContent {
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.75rem;
   }
   
   .searchResultsContent .medicineContainer.gridView .medicineGrid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchResultsContent .medicineContainer.gridView .medicineGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
   }
 }
 
@@ -5086,6 +5517,195 @@ h1 {
   z-index: 10001 !important;
 }
 
+/* Advanced Search Filters Styles */
+.advancedFiltersSection {
+  margin-top: 1rem;
+  background: var(--neutral-white);
+  border-radius: 12px;
+  border: 1px solid var(--neutral-200);
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+}
+
+.advancedFiltersToggle {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: var(--neutral-50);
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--neutral-700);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  justify-content: center;
+}
+
+.advancedFiltersToggle:hover {
+  background: var(--neutral-100);
+  color: var(--primary-blue);
+}
+
+.filtersGrid {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  border-top: 1px solid var(--neutral-200);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.filterGroupTitle {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.filterCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition-fast);
+}
+
+.filterCheckbox:hover {
+  background: var(--neutral-50);
+}
+
+.filterCheckbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-blue);
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--neutral-700);
+  cursor: pointer;
+  user-select: none;
+}
+
+.filterActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.resetFiltersButton,
+.selectAllButton {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border: 1px solid var(--neutral-300);
+}
+
+.resetFiltersButton {
+  background: var(--neutral-white);
+  color: var(--neutral-700);
+}
+
+.resetFiltersButton:hover {
+  background: var(--neutral-50);
+  border-color: var(--neutral-400);
+}
+
+.selectAllButton {
+  background: var(--primary-blue);
+  color: var(--neutral-white);
+  border-color: var(--primary-blue);
+}
+
+.selectAllButton:hover {
+  background: var(--primary-blue-dark);
+  border-color: var(--primary-blue-dark);
+}
+
+.filterExamples {
+  background: var(--neutral-50);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-200);
+}
+
+.examplesTitle {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+}
+
+.examplesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.example {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--neutral-600);
+  display: block;
+}
+
+.example strong {
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+/* Responsive Design for Advanced Filters */
+@media (min-width: 768px) {
+  .filtersGrid {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+
+  .filterGroup {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+  }
+
+  .filterGroupTitle {
+    grid-column: span 2;
+  }
+
+  .filterActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 1024px) {
+  .filterGroup {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .filterGroupTitle {
+    grid-column: span 3;
+  }
+}
+
 /* Fix for any other tooltip libraries */
 :global([data-tooltip]) {
   z-index: 10001 !important;
@@ -5093,4 +5713,547 @@ h1 {
 
 :global(.tooltip) {
   z-index: 10001 !important;
+}
+
+/* Beautiful Single-Line Filters */
+.filtersContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 16px;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.filterGroup:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+}
+
+.filterIcon {
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.filterSelect {
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  min-width: 140px;
+  outline: none;
+}
+
+.filterSelect:focus {
+  color: #3b82f6;
+}
+
+/* Override existing responsive filters */
+@media (max-width: 768px) {
+  .filtersContainer {
+    flex-direction: column;
+    gap: 8px;
+    margin-right: 8px;
+    width: 100%;
+  }
+  
+  .filterGroup {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .filterSelect {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+/* Enhanced Filters with Chips */
+.filtersSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 12px;
+}
+
+.filtersContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 4px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  min-height: 30px;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filterIcon {
+  color: #6b7280;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+}
+
+.filterSelect {
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  min-width: 110px;
+  outline: none;
+  padding: 2px 4px;
+  height: 24px;
+  line-height: 1.2;
+}
+
+.filterSelect:focus {
+  color: #3b82f6;
+}
+
+/* Active Filter Chips */
+.activeFiltersChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+}
+
+.filterChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 18px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  animation: slideIn 0.2s ease-out;
+  max-width: 250px;
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+.chipLabel {
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.chipValue {
+  font-weight: 600;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chipRemove {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s ease;
+  margin-left: 2px;
+}
+
+.chipRemove:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Filter Toggle */
+.mobileFilterToggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.mobileFilterToggle:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+}
+
+/* Active filter indicator dot */
+.activeFilterDot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+
+/* Mobile responsive styles for filters - Compact */
+@media screen and (max-width: 768px) {
+  /* Compact mobile header */
+  .searchResultsHeader {
+    padding: 6px 12px;
+    min-height: unset;
+  }
+  
+  .searchResultsTitle h2 {
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  .resultsCount {
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
+  
+  .headerLeft {
+    gap: 6px;
+  }
+  
+  .closeButton {
+    padding: 4px;
+    min-width: 28px;
+    height: 28px;
+  }
+  
+  .filtersSection {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .mobileFilterToggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    min-height: 28px;
+  }
+
+  .filtersContainer {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.2s ease;
+  }
+
+  .filtersContainer.mobileFiltersOpen {
+    display: flex;
+  }
+
+  .filterGroup {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .filterIcon {
+    flex-shrink: 0;
+  }
+
+  .filterSelect {
+    flex: 1;
+    min-width: unset;
+    padding: 6px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    height: 28px;
+  }
+  
+  /* Compact active filter chips */
+  .activeFiltersChips {
+    display: none;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  
+  .mobileChipsOpen {
+    display: flex;
+  }
+  
+  .filterChip {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    max-height: 18px;
+  }
+  
+  .chipLabel {
+    font-weight: 500;
+    color: #6b7280;
+  }
+  
+  .chipValue {
+    color: #374151;
+  }
+  
+  .chipRemove {
+    background: none;
+    border: none;
+    padding: 1px;
+    cursor: pointer;
+    color: #6b7280;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Make view mode selector more compact */
+  .viewModeSelector {
+    padding: 2px;
+  }
+  
+  .viewModeButton {
+    padding: 4px 6px;
+  }
+  
+  .headerRight {
+    gap: 6px;
+  }
+
+  .activeFiltersChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .activeFiltersChips.mobileChipsOpen {
+    display: flex;
+  }
+
+  .filterChip {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    max-width: 200px;
+    border-radius: 14px;
+  }
+
+  .chipValue {
+    max-width: 120px;
+  }
+
+  .chipValue {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Header adjustments for mobile */
+  .headerRight {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .searchResultsHeader {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .headerMainRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .headerLeft {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .searchResultsTitle h2 {
+    font-size: 1.25rem;
+  }
+
+  .resultsCount {
+    font-size: 0.85rem;
+  }
+}
+
+/* Slide down animation for mobile filters */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header Controls - Single Line Layout */
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Inline Filters for Desktop */
+.inlineFilters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inlineFilterSelect {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  min-width: 140px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.inlineFilterSelect:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.15);
+}
+
+.inlineFilterSelect:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Active Filters Row - Only show when filters are active */
+.activeFiltersRow {
+  width: 100%;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  overflow: visible;
+}
+
+/* Hide mobile filter toggle on desktop */
+@media (min-width: 769px) {
+  .mobileFilterToggle {
+    display: none;
+  }
+}
+
+/* Mobile Filter Overrides */
+@media (max-width: 768px) {
+  .headerControls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .inlineFilters {
+    display: none; /* Hide desktop filters on mobile */
+  }
+
+  .mobileFilterToggle {
+    display: flex; /* Show mobile toggle on mobile */
+  }
+
+  .inlineFilters.mobileFiltersOpen {
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 12px;
+    background: rgba(248, 250, 252, 0.95);
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .inlineFilters.mobileFiltersOpen .inlineFilterSelect {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .activeFiltersRow {
+    padding-top: 8px;
+    width: 100%;
+    overflow: visible;
+  }
 }

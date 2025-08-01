@@ -1,25 +1,29 @@
 import React from 'react';
-import { DollarSign } from 'lucide-react';
 import type { Medicine } from '../utils/csvParser';
 import styles from './MedicineCard.module.css';
 
 interface MedicineCardProps {
   medicine: Medicine;
+  onExpand?: (medicine: Medicine) => void;
 }
 
 export const MedicineCard: React.FC<MedicineCardProps> = ({
   medicine,
+  onExpand,
 }) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-AE', {
-      style: 'currency',
-      currency: 'AED',
       minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(price);
   };
 
   return (
-    <div className={styles.medicineCard}>
+    <div 
+      className={styles.medicineCard}
+      onClick={() => onExpand?.(medicine)}
+      style={{ cursor: onExpand ? 'pointer' : 'default' }}
+    >
       {/* Priority Labels - Single line */}
       <div className={styles.labelsContainer}>
         {medicine.uppScope && (
@@ -58,11 +62,33 @@ export const MedicineCard: React.FC<MedicineCardProps> = ({
             <span className={styles.detailLabel}>Package:</span>
             <span className={styles.detailValue}>{medicine.packageSize}</span>
           </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Manufacturer:</span>
+            <span 
+              className={`${styles.detailValue} ${styles.manufacturerName}`}
+              title={medicine.manufacturer || medicine.manufacturerName || 'Unknown Manufacturer'}
+            >
+              {(medicine.manufacturer || medicine.manufacturerName || 'Unknown Manufacturer').length > 20 
+                ? `${(medicine.manufacturer || medicine.manufacturerName || 'Unknown Manufacturer').substring(0, 20)}...` 
+                : (medicine.manufacturer || medicine.manufacturerName || 'Unknown Manufacturer')}
+            </span>
+          </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Distributor:</span>
+            <span 
+              className={`${styles.detailValue} ${styles.distributorName}`}
+              title={medicine.agentName || 'Unknown Distributor'}
+            >
+              {(medicine.agentName || 'Unknown Distributor').length > 20 
+                ? `${(medicine.agentName || 'Unknown Distributor').substring(0, 20)}...` 
+                : (medicine.agentName || 'Unknown Distributor')}
+            </span>
+          </div>
         </div>
 
         <div className={styles.priceSection}>
           <div className={styles.priceContainer}>
-            <DollarSign size={12} />
+            <span className={styles.aedLabel}>AED</span>
             <span className={styles.price}>{formatPrice(medicine.price)}</span>
           </div>
           {medicine.inStock && (

@@ -1,63 +1,20 @@
 import { useState, useEffect } from 'react';
-import { Search, Download, Filter, RefreshCw, Database, Eye, ChevronRight } from 'lucide-react';
+import { Search, Download, Filter, RefreshCw, Database, Eye, ChevronRight, FileText } from 'lucide-react';
+import { useMedicines } from '../../hooks/useMedicines';
+import { ReportGenerator } from '../../components/ReportGenerator';
+import type { Medicine } from '../../utils/csvParser';
 import styles from './DatabasePage.module.css';
 
-interface Medicine {
-  id: string;
-  name: string;
-  genericName: string;
-}
-
 const DatabasePage = () => {
-  const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [filteredMedicines, setFilteredMedicines] = useState<Medicine[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(50);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [showReports, setShowReports] = useState(false);
+  const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
 
-  // Load medicines data
-  useEffect(() => {
-    const loadMedicines = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/skus.csv');
-        const csvText = await response.text();
-        
-        const lines = csvText.split('\n');
-        // Skip headers for processing
-        lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-        
-        const medicineData: Medicine[] = [];
-        
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (line) {
-            const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
-            
-            if (values.length >= 3) {
-              medicineData.push({
-                id: values[0] || `med-${i}`,
-                name: values[1] || 'Unknown Medicine',
-                genericName: values[2] || 'Unknown Generic'
-              });
-            }
-          }
-        }
-        
-        setMedicines(medicineData);
-        setFilteredMedicines(medicineData);
-        setTotalRecords(medicineData.length);
-      } catch (error) {
-        console.error('Error loading medicines:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadMedicines();
-  }, []);
+  const { medicines, isLoading: loading } = useMedicines();
 
   // Filter medicines based on search term
   useEffect(() => {
@@ -176,6 +133,14 @@ const DatabasePage = () => {
 
         <div className={styles.actionButtons}>
           <button 
+            onClick={() => setShowReports(!showReports)}
+            className={`${styles.actionButton} ${showReports ? styles.active : ''}`}
+            title="Generate PDF Reports"
+          >
+            <FileText size={18} />
+            PDF Reports
+          </button>
+          <button 
             onClick={handleRefresh}
             className={styles.actionButton}
             title="Refresh Database"
@@ -247,6 +212,7 @@ const DatabasePage = () => {
                     <div className={styles.actionCell}>
                       <button 
                         className={styles.viewButton}
+                        onClick={() => setSelectedMedicine(medicine)}
                         title="View Details"
                       >
                         <Eye size={16} />
@@ -306,6 +272,128 @@ const DatabasePage = () => {
             >
               Next
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* PDF Reports Modal */}
+      {showReports && (
+        <div className={styles.modalOverlay} onClick={() => setShowReports(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2>PDF Report Generator</h2>
+              <button 
+                className={styles.closeButton}
+                onClick={() => setShowReports(false)}
+                title="Close"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <ReportGenerator medicines={medicines} onClose={() => setShowReports(false)} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Medicine Details Modal */}
+      {selectedMedicine && (
+        <div className={styles.modalOverlay} onClick={() => setSelectedMedicine(null)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2>Medicine Details</h2>
+              <button 
+                className={styles.closeButton}
+                onClick={() => setSelectedMedicine(null)}
+                title="Close"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.medicineDetails}>
+                <div className={styles.detailsGrid}>
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>DOH Drug Code</div>
+                    <div className={styles.detailValue}>{selectedMedicine.id}</div>
+                  </div>
+                  
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>Brand Name</div>
+                    <div className={styles.detailValue}>{selectedMedicine.name}</div>
+                  </div>
+                  
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>Generic Name</div>
+                    <div className={styles.detailValue}>{selectedMedicine.genericName}</div>
+                  </div>
+                  
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>Strength</div>
+                    <div className={styles.detailValue}>{selectedMedicine.strength || 'N/A'}</div>
+                  </div>
+                  
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>Dosage Form</div>
+                    <div className={styles.detailValue}>{selectedMedicine.dosageForm || 'N/A'}</div>
+                  </div>
+                  
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>Package Size</div>
+                    <div className={styles.detailValue}>{selectedMedicine.packageSize || 'N/A'}</div>
+                  </div>
+                  
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>Price</div>
+                    <div className={styles.detailValue}>AED {selectedMedicine.price?.toFixed(2) || '0.00'}</div>
+                  </div>
+                  
+                  <div className={styles.detailCard}>
+                    <div className={styles.detailLabel}>Manufacturer</div>
+                    <div className={styles.detailValue}>{selectedMedicine.manufacturer || 'UAE Pharmacy'}</div>
+                  </div>
+                </div>
+                
+                <div className={styles.statusSection}>
+                  <h3 className={styles.statusTitle}>Coverage Status</h3>
+                  <div className={styles.statusGrid}>
+                    <div className={`${styles.statusCard} ${selectedMedicine.uppScope ? styles.active : styles.inactive}`}>
+                      <div className={styles.statusLabel}>UPP Scope</div>
+                      <div className={styles.statusValue}>{selectedMedicine.uppScope ? 'Yes' : 'No'}</div>
+                    </div>
+                    
+                    <div className={`${styles.statusCard} ${selectedMedicine.thiqa ? styles.active : styles.inactive}`}>
+                      <div className={styles.statusLabel}>Thiqa Formulary</div>
+                      <div className={styles.statusValue}>{selectedMedicine.thiqa ? 'Yes' : 'No'}</div>
+                    </div>
+                    
+                    <div className={`${styles.statusCard} ${selectedMedicine.basic ? styles.active : styles.inactive}`}>
+                      <div className={styles.statusLabel}>Basic Formulary</div>
+                      <div className={styles.statusValue}>{selectedMedicine.basic ? 'Yes' : 'No'}</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={styles.additionalInfo}>
+                  <h3 className={styles.infoTitle}>Additional Information</h3>
+                  <div className={styles.infoGrid}>
+                    <div className={styles.infoItem}>
+                      <span className={styles.infoLabel}>Category:</span>
+                      <span className={styles.infoValue}>{selectedMedicine.category || 'Prescription'}</span>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <span className={styles.infoLabel}>In Stock:</span>
+                      <span className={styles.infoValue}>{selectedMedicine.inStock ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <span className={styles.infoLabel}>Priority Score:</span>
+                      <span className={styles.infoValue}>{selectedMedicine.priorityScore}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

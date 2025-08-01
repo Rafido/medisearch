@@ -13,7 +13,19 @@ export const useMedicines = () => {
         setIsLoading(true);
         setError(null);
         
-        // Fetch the CSV file
+        // Try to fetch the JSON file first (converted from Excel)
+        try {
+          const response = await fetch('/medicines.json');
+          if (response.ok) {
+            const jsonData = await response.json();
+            setMedicines(jsonData); // Already sorted and processed
+            return;
+          }
+        } catch (jsonError) {
+          console.warn('JSON file not found, trying CSV fallback...');
+        }
+        
+        // Fallback to CSV file
         const response = await fetch('/skus.csv');
         if (!response.ok) {
           throw new Error(`Failed to load medicines: ${response.statusText}`);

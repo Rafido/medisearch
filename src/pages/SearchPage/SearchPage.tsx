@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useMedicines } from '../../hooks/useMedicines';
 import type { Medicine } from '../../utils/csvParser';
 import { sortMedicines } from '../../utils/csvParser';
@@ -21,11 +21,13 @@ import {
   RefreshCw,
   X,
   Grid,
-  List
+  List,
+  Filter
 } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
 import { MedicineCard } from '../../components/MedicineCard';
 import { MedicineListItem } from '../../components/MedicineListItem';
+import MedicineDetails from '../../components/MedicineDetails/MedicineDetails';
 import styles from './SearchPage.module.css';
 
 export type ViewMode = 'grid' | 'list';
@@ -45,6 +47,21 @@ const SearchPage = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [selectedDosageForm, setSelectedDosageForm] = useState<string>('all');
+  const [selectedDistributor, setSelectedDistributor] = useState<string>('all');
+  const [unfilteredMedicines, setUnfilteredMedicines] = useState<Medicine[]>([]);
+  const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
+  
+  // Advanced search filter states
+  const [searchFilters, setSearchFilters] = useState({
+    searchByName: true,
+    searchByDistributor: false,
+    searchByManufacturer: false,
+    searchByCountry: false,
+    searchByGeneric: true
+  });
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  
   const searchTimeout = useRef<number | undefined>(undefined);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
@@ -55,11 +72,106 @@ const SearchPage = () => {
     error: Error | null;
   };
 
+  // Get unique dosage forms for filter - from unfiltered search results
+  const uniqueDosageForms = React.useMemo(() => {
+    const sourceMedicines = searchTriggered && unfilteredMedicines.length > 0 ? unfilteredMedicines : [];
+    if (sourceMedicines.length === 0) return [];
+    
+    // Count medicines per form
+    const formCounts = new Map<string, number>();
+    sourceMedicines
+      .filter(med => med.dosageForm && med.dosageForm.trim() !== '')
+      .forEach(med => {
+        const form = med.dosageForm.trim();
+        formCounts.set(form, (formCounts.get(form) || 0) + 1);
+      });
+    
+    // Convert to array and sort by count (highest first), then alphabetically
+    const forms = Array.from(formCounts.entries())
+      .sort((a, b) => {
+        // First sort by count (highest first)
+        if (b[1] !== a[1]) {
+          return b[1] - a[1];
+        }
+        // Then sort alphabetically
+        return a[0].localeCompare(b[0]);
+      })
+      .map(([form]) => form);
+    
+    return forms;
+  }, [unfilteredMedicines, searchTriggered]);
+
+  // Get unique distributors for filter - from unfiltered search results
+  const uniqueDistributors = React.useMemo(() => {
+    const sourceMedicines = searchTriggered && unfilteredMedicines.length > 0 ? unfilteredMedicines : [];
+    if (sourceMedicines.length === 0) return [];
+    
+    // Count medicines per distributor
+    const distributorCounts = new Map<string, number>();
+    sourceMedicines
+      .filter(med => med.agentName && med.agentName.trim() !== '' && med.agentName.trim() !== 'N/A')
+      .forEach(med => {
+        const distributor = med.agentName?.trim();
+        distributorCounts.set(distributor || "", (distributorCounts.get(distributor || "") || 0) + 1);
+      });
+    
+    // Convert to array and sort by count (highest first), then alphabetically
+    const distributors = Array.from(distributorCounts.entries())
+      .sort((a, b) => {
+        // First sort by count (highest first)
+        if (b[1] !== a[1]) {
+          return b[1] - a[1];
+        }
+        // Then sort alphabetically
+        return a[0].localeCompare(b[0]);
+      })
+      .map(([distributor]) => distributor);
+    
+    return distributors;
+  }, [unfilteredMedicines, searchTriggered]);
+
   useEffect(() => {
     if (medicines.length > 0) {
       console.log('Medicines loaded successfully:', medicines.length);
     }
   }, [medicines]);
+
+  // Utility function to extract country from manufacturer name
+  const extractCountryFromManufacturer = (manufacturer: string): string => {
+    if (!manufacturer) return '';
+    
+    // Common patterns to extract country
+    const countryPatterns = [
+      /\(([^)]+)\).*U\.S\.A/i, // (City), U.S.A
+      /\(([^)]+)\).*USA/i,     // (City), USA
+      /\(([^)]+)\).*Germany/i, // (City), Germany
+      /\(([^)]+)\).*India/i,   // (City), India
+      /\(([^)]+)\).*UK/i,      // (City), UK
+      /\(([^)]+)\).*China/i,   // (City), China
+      /U\.S\.A$/i,             // Ends with U.S.A
+      /USA$/i,                 // Ends with USA
+      /Germany$/i,             // Ends with Germany
+      /India$/i,               // Ends with India
+      /UK$/i,                  // Ends with UK
+      /China$/i,               // Ends with China
+    ];
+    
+    // Try to extract from patterns
+    for (const pattern of countryPatterns) {
+      const match = manufacturer.match(pattern);
+      if (match) {
+        return match[1] || match[0];
+      }
+    }
+    
+    // If no pattern matches, try to get the last part after comma
+    const parts = manufacturer.split(',').map(part => part.trim());
+    if (parts.length > 1) {
+      return parts[parts.length - 1];
+    }
+    
+    return '';
+  };
 
   const generateSuggestions = useCallback((query: string) => {
     if (!query.trim() || medicines.length === 0) {
@@ -69,13 +181,43 @@ const SearchPage = () => {
 
     const lowerQuery = query.toLowerCase().trim();
     
-    // Find medicines that match the query
+    // Find medicines that match the query based on selected filters
     const matchingMedicines = medicines.filter(medicine => {
-      const nameMatch = medicine.name?.toLowerCase().includes(lowerQuery);
-      const genericMatch = medicine.genericName?.toLowerCase().includes(lowerQuery);
-      const codeMatch = medicine.id?.toLowerCase().includes(lowerQuery);
+      const lowerQuery = query.toLowerCase().trim();
+      let hasMatch = false;
       
-      return nameMatch || genericMatch || codeMatch;
+      // Check each filter type
+      if (searchFilters.searchByName) {
+        const nameMatch = medicine.name?.toLowerCase().includes(lowerQuery);
+        if (nameMatch) hasMatch = true;
+      }
+      
+      if (searchFilters.searchByGeneric) {
+        const genericMatch = medicine.genericName?.toLowerCase().includes(lowerQuery);
+        if (genericMatch) hasMatch = true;
+      }
+      
+      if (searchFilters.searchByDistributor) {
+        const distributorMatch = medicine.agentName?.toLowerCase().includes(lowerQuery);
+        if (distributorMatch) hasMatch = true;
+      }
+      
+      if (searchFilters.searchByManufacturer) {
+        const manufacturerMatch = (medicine.manufacturer || medicine.manufacturerName)?.toLowerCase().includes(lowerQuery);
+        if (manufacturerMatch) hasMatch = true;
+      }
+      
+      if (searchFilters.searchByCountry) {
+        const country = extractCountryFromManufacturer(medicine.manufacturer || medicine.manufacturerName || '');
+        const countryMatch = country.toLowerCase().includes(lowerQuery);
+        if (countryMatch) hasMatch = true;
+      }
+      
+      // Always include ID/code search for backwards compatibility
+      const codeMatch = medicine.id?.toLowerCase().includes(lowerQuery);
+      if (codeMatch) hasMatch = true;
+      
+      return hasMatch;
     });
 
     // Group by generic names and get unique generic names
@@ -131,7 +273,7 @@ const SearchPage = () => {
     } else {
       setShowSuggestions(false);
     }
-  }, [medicines]);
+  }, [medicines, searchFilters]);
 
   const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
@@ -166,14 +308,32 @@ const SearchPage = () => {
         med.genericName?.toLowerCase() === medicine._genericName?.toLowerCase()
       );
       
-      const sortedResults = sortMedicines(genericResults);
-      setFilteredMedicines(sortedResults);
+      // Store unfiltered results for form filter options
+      const sortedGenericResults = sortMedicines(genericResults);
+      setUnfilteredMedicines(sortedGenericResults);
+      
+      // Apply both dosage form and distributor filters to get final results
+      let finalResults = genericResults;
+      if (selectedDosageForm !== 'all') {
+        finalResults = finalResults.filter(med => 
+          med.dosageForm?.toLowerCase() === selectedDosageForm.toLowerCase()
+        );
+      }
+      if (selectedDistributor !== 'all') {
+        finalResults = finalResults.filter(med => 
+          med.agentName?.trim() === selectedDistributor
+        );
+      }
+      
+      const sortedFinalResults = sortMedicines(finalResults);
+      setFilteredMedicines(sortedFinalResults);
       setSearchTriggered(true);
     } else {
       // Original behavior for individual medicine selection
       setSearchQuery(displayText);
       setShowSuggestions(false);
       setSelectedMedicine(medicine);
+      setUnfilteredMedicines([medicine]);
       setFilteredMedicines([medicine]);
       setSearchTriggered(true);
     }
@@ -182,13 +342,14 @@ const SearchPage = () => {
   const executeSearch = useCallback(() => {
     if (!searchQuery.trim()) {
       setFilteredMedicines([]);
+      setUnfilteredMedicines([]);
       setSearchTriggered(false);
       return;
     }
 
     const lowerQuery = searchQuery.toLowerCase().trim();
     
-    const results = medicines.filter(medicine => {
+    const initialResults = medicines.filter(medicine => {
       const nameMatch = medicine.name?.toLowerCase().includes(lowerQuery);
       const genericMatch = medicine.genericName?.toLowerCase().includes(lowerQuery);
       const codeMatch = medicine.id?.toLowerCase().includes(lowerQuery);
@@ -196,23 +357,87 @@ const SearchPage = () => {
       return nameMatch || genericMatch || codeMatch;
     });
 
-    // Sort results using the enhanced sorting logic
-    const sortedResults = sortMedicines(results);
-    setFilteredMedicines(sortedResults);
+    // Store unfiltered results for form filter options
+    const sortedInitialResults = sortMedicines(initialResults);
+    setUnfilteredMedicines(sortedInitialResults);
+
+    // Apply both dosage form and distributor filters to get final results
+    let finalResults = initialResults;
+    if (selectedDosageForm !== 'all') {
+      finalResults = finalResults.filter(medicine => 
+        medicine.dosageForm?.toLowerCase() === selectedDosageForm.toLowerCase()
+      );
+    }
+    if (selectedDistributor !== 'all') {
+      finalResults = finalResults.filter(medicine => 
+        medicine.agentName?.trim() === selectedDistributor
+      );
+    }
+
+    // Sort final results
+    const sortedFinalResults = sortMedicines(finalResults);
+    setFilteredMedicines(sortedFinalResults);
     setSearchTriggered(true);
     setShowSuggestions(false);
-  }, [searchQuery, medicines]);
+  }, [searchQuery, medicines, selectedDosageForm, selectedDistributor]);
 
   const handleClearSearch = useCallback(() => {
     setSearchQuery('');
     setFilteredMedicines([]);
+    setUnfilteredMedicines([]);
     setSearchTriggered(false);
     setSelectedMedicine(null);
     setShowSuggestions(false);
+    setSelectedDosageForm('all'); // Reset form filter when clearing search
+    setSelectedDistributor('all'); // Reset distributor filter when clearing search
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, []);
+
+  // Handle dosage form filter changes
+  const handleDosageFormChange = useCallback((selectedForm: string) => {
+    setSelectedDosageForm(selectedForm);
+    applyFilters(selectedForm, selectedDistributor);
+  }, [selectedDistributor, unfilteredMedicines, searchTriggered]);
+
+  // Handle distributor filter changes
+  const handleDistributorChange = useCallback((selectedDist: string) => {
+    setSelectedDistributor(selectedDist);
+    applyFilters(selectedDosageForm, selectedDist);
+  }, [selectedDosageForm, unfilteredMedicines, searchTriggered]);
+
+  // Apply both form and distributor filters
+  const applyFilters = useCallback((formFilter: string, distributorFilter: string) => {
+    if (searchTriggered && unfilteredMedicines.length > 0) {
+      // Apply both filters to unfiltered results
+      let filteredResults = unfilteredMedicines;
+      
+      // Apply dosage form filter
+      if (formFilter !== 'all') {
+        filteredResults = filteredResults.filter(medicine => 
+          medicine.dosageForm?.toLowerCase() === formFilter.toLowerCase()
+        );
+      }
+      
+      // Apply distributor filter
+      if (distributorFilter !== 'all') {
+        filteredResults = filteredResults.filter(medicine => 
+          medicine.agentName?.trim() === distributorFilter
+        );
+      }
+      
+      const sortedResults = sortMedicines(filteredResults);
+      setFilteredMedicines(sortedResults);
+    }
+  }, [unfilteredMedicines, searchTriggered]);
+
+  // Re-run search when dosage form filter changes - removed to prevent hiding dropdown
+  // useEffect(() => {
+  //   if (searchTriggered && searchQuery.trim()) {
+  //     executeSearch();
+  //   }
+  // }, [selectedDosageForm, executeSearch, searchTriggered, searchQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -300,60 +525,167 @@ const SearchPage = () => {
         <div className={styles.searchResultsOverlay}>
           {/* Fixed header with close and view controls */}
           <div className={styles.searchResultsHeader}>
-            <div className={styles.headerLeft}>
-              <button
-                className={styles.closeButton}
-                onClick={() => {
-                  setSearchTriggered(false);
-                  setFilteredMedicines([]);
-                  setSearchQuery('');
-                }}
-                aria-label="Close search results"
-              >
-                <X size={24} />
-              </button>
-              <div className={styles.searchResultsTitle}>
-                <h2>Search Results for "{searchQuery}"</h2>
-                <span className={styles.resultsCount}>
-                  {filteredMedicines.length > 0 ? (
+            {/* Main header row with title and controls */}
+            <div className={styles.headerMainRow}>
+              <div className={styles.headerLeft}>
+                <button
+                  className={styles.closeButton}
+                  onClick={() => {
+                    setSearchTriggered(false);
+                    setFilteredMedicines([]);
+                    setSearchQuery('');
+                  }}
+                  aria-label="Close search results"
+                >
+                  <X size={24} />
+                </button>
+                <div className={styles.searchResultsTitle}>
+                  <h2>{searchQuery}"</h2>
+                  <span className={styles.resultsCount}>
+                    {filteredMedicines.length > 0 ? (
+                      <>
+                        <CheckCircle size={16} />
+                        {filteredMedicines.length} medicine{filteredMedicines.length !== 1 ? 's' : ''} found
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle size={16} />
+                        No medicines found
+                      </>
+                    )}
+                  </span>
+                </div>
+              </div>
+              
+              <div className={styles.headerRight}>
+                {/* Single Line Filters and Controls */}
+                <div className={styles.headerControls}>
+                  {/* Filters - Desktop inline, Mobile collapsible */}
+                  {searchTriggered && (uniqueDosageForms.length > 1 || uniqueDistributors.length > 1) && (
                     <>
-                      <CheckCircle size={16} />
-                      {filteredMedicines.length} medicine{filteredMedicines.length !== 1 ? 's' : ''} found
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle size={16} />
-                      No medicines found
+                      {/* Mobile Filter Toggle Button */}
+                      <button 
+                        className={styles.mobileFilterToggle}
+                        onClick={() => setShowMobileFilters(!showMobileFilters)}
+                        aria-label="Toggle filters"
+                      >
+                        <Filter size={16} />
+                        Filters
+                        {showMobileFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        {(selectedDosageForm !== 'all' || selectedDistributor !== 'all') && (
+                          <span className={styles.activeFilterDot}></span>
+                        )}
+                      </button>
+
+                      {/* Desktop Inline Filters */}
+                      <div className={`${styles.inlineFilters} ${showMobileFilters ? styles.mobileFiltersOpen : ''}`}>
+                        {uniqueDosageForms.length > 1 && (
+                          <select
+                            value={selectedDosageForm}
+                            onChange={(e) => handleDosageFormChange(e.target.value)}
+                            className={styles.inlineFilterSelect}
+                            aria-label="Filter by dosage form"
+                          >
+                            <option value="all">All Forms ({unfilteredMedicines.length})</option>
+                            {uniqueDosageForms.map(form => {
+                              const count = unfilteredMedicines.filter(med => 
+                                med.dosageForm?.toLowerCase() === form.toLowerCase()
+                              ).length;
+                              return (
+                                <option key={form} value={form}>
+                                  {form} ({count})
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
+
+                        {uniqueDistributors.length > 1 && (
+                          <select
+                            value={selectedDistributor}
+                            onChange={(e) => handleDistributorChange(e.target.value)}
+                            className={styles.inlineFilterSelect}
+                            aria-label="Filter by distributor"
+                          >
+                            <option value="all">All Distributors ({unfilteredMedicines.length})</option>
+                            {uniqueDistributors.map(distributor => {
+                              const count = unfilteredMedicines.filter(med => 
+                                med.agentName?.trim() === distributor
+                              ).length;
+                              return (
+                                <option key={distributor} value={distributor}>
+                                  {distributor.length > 25 ? `${distributor.substring(0, 25)}...` : distributor} ({count})
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
+                      </div>
                     </>
                   )}
-                </span>
+                  
+                  {/* View Mode Selector */}
+                  <div className={styles.viewModeSelector}>
+                    <button
+                      className={`${styles.viewModeButton} ${
+                        viewMode === 'grid' ? styles.active : ''
+                      }`}
+                      onClick={() => setViewMode('grid')}
+                      title="Grid View"
+                      aria-label="Switch to grid view"
+                    >
+                      <Grid size={18} />
+                    </button>
+                    <button
+                      className={`${styles.viewModeButton} ${
+                        viewMode === 'list' ? styles.active : ''
+                      }`}
+                      onClick={() => setViewMode('list')}
+                      title="List View"
+                      aria-label="Switch to list view"
+                    >
+                      <List size={18} />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className={styles.headerRight}>
-              <div className={styles.viewModeSelector}>
-                <button
-                  className={`${styles.viewModeButton} ${
-                    viewMode === 'grid' ? styles.active : ''
-                  }`}
-                  onClick={() => setViewMode('grid')}
-                  title="Grid View"
-                  aria-label="Switch to grid view"
-                >
-                  <Grid size={18} />
-                </button>
-                <button
-                  className={`${styles.viewModeButton} ${
-                    viewMode === 'list' ? styles.active : ''
-                  }`}
-                  onClick={() => setViewMode('list')}
-                  title="List View"
-                  aria-label="Switch to list view"
-                >
-                  <List size={18} />
-                </button>
+
+            {/* Active Filter Chips - Show below header on a separate line only when filters are active */}
+            {(selectedDosageForm !== 'all' || selectedDistributor !== 'all') && (
+              <div className={styles.activeFiltersRow}>
+                <div className={styles.activeFiltersChips}>
+                  {selectedDosageForm !== 'all' && (
+                    <div className={styles.filterChip}>
+                      <span className={styles.chipLabel}>Form:</span>
+                      <span className={styles.chipValue}>{selectedDosageForm}</span>
+                      <button
+                        onClick={() => handleDosageFormChange('all')}
+                        className={styles.chipRemove}
+                        aria-label="Remove form filter"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+                  {selectedDistributor !== 'all' && (
+                    <div className={styles.filterChip}>
+                      <span className={styles.chipLabel}>Distributor:</span>
+                      <span className={styles.chipValue}>
+                        {selectedDistributor.length > 20 ? `${selectedDistributor.substring(0, 20)}...` : selectedDistributor}
+                      </span>
+                      <button
+                        onClick={() => handleDistributorChange('all')}
+                        className={styles.chipRemove}
+                        aria-label="Remove distributor filter"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Search results content */}
@@ -366,6 +698,7 @@ const SearchPage = () => {
                       <MedicineCard 
                         key={medicine.id} 
                         medicine={medicine}
+                        onExpand={setSelectedMedicine}
                       />
                     ))}
                   </div>
@@ -375,6 +708,7 @@ const SearchPage = () => {
                       <MedicineListItem 
                         key={medicine.id} 
                         medicine={medicine}
+                        onExpand={setSelectedMedicine}
                       />
                     ))}
                   </div>
@@ -526,6 +860,117 @@ const SearchPage = () => {
                 )}
               </div>
             </form>
+
+            {/* Advanced Search Filters */}
+            <div className={styles.advancedFiltersSection}>
+              <button 
+                type="button"
+                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                className={styles.advancedFiltersToggle}
+              >
+                <Filter size={16} />
+                Advanced Search Filters
+                {showAdvancedFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </button>
+
+              {showAdvancedFilters && (
+                <div className={styles.filtersGrid}>
+                  <div className={styles.filterGroup}>
+                    <h4 className={styles.filterGroupTitle}>Search In:</h4>
+                    
+                    <label className={styles.filterCheckbox}>
+                      <input
+                        type="checkbox"
+                        checked={searchFilters.searchByName}
+                        onChange={(e) => setSearchFilters(prev => ({...prev, searchByName: e.target.checked}))}
+                      />
+                      <span className={styles.checkboxLabel}>Medicine Name</span>
+                    </label>
+
+                    <label className={styles.filterCheckbox}>
+                      <input
+                        type="checkbox"
+                        checked={searchFilters.searchByGeneric}
+                        onChange={(e) => setSearchFilters(prev => ({...prev, searchByGeneric: e.target.checked}))}
+                      />
+                      <span className={styles.checkboxLabel}>Generic Name</span>
+                    </label>
+
+                    <label className={styles.filterCheckbox}>
+                      <input
+                        type="checkbox"
+                        checked={searchFilters.searchByDistributor}
+                        onChange={(e) => setSearchFilters(prev => ({...prev, searchByDistributor: e.target.checked}))}
+                      />
+                      <span className={styles.checkboxLabel}>Distributor/Agent</span>
+                    </label>
+
+                    <label className={styles.filterCheckbox}>
+                      <input
+                        type="checkbox"
+                        checked={searchFilters.searchByManufacturer}
+                        onChange={(e) => setSearchFilters(prev => ({...prev, searchByManufacturer: e.target.checked}))}
+                      />
+                      <span className={styles.checkboxLabel}>Manufacturer</span>
+                    </label>
+
+                    <label className={styles.filterCheckbox}>
+                      <input
+                        type="checkbox"
+                        checked={searchFilters.searchByCountry}
+                        onChange={(e) => setSearchFilters(prev => ({...prev, searchByCountry: e.target.checked}))}
+                      />
+                      <span className={styles.checkboxLabel}>Country</span>
+                    </label>
+                  </div>
+
+                  <div className={styles.filterActions}>
+                    <button 
+                      type="button"
+                      onClick={() => setSearchFilters({
+                        searchByName: true,
+                        searchByDistributor: false,
+                        searchByManufacturer: false,
+                        searchByCountry: false,
+                        searchByGeneric: true
+                      })}
+                      className={styles.resetFiltersButton}
+                    >
+                      Reset to Default
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => setSearchFilters({
+                        searchByName: true,
+                        searchByDistributor: true,
+                        searchByManufacturer: true,
+                        searchByCountry: true,
+                        searchByGeneric: true
+                      })}
+                      className={styles.selectAllButton}
+                    >
+                      Select All
+                    </button>
+                  </div>
+
+                  <div className={styles.filterExamples}>
+                    <h5 className={styles.examplesTitle}>Search Examples:</h5>
+                    <div className={styles.examplesList}>
+                      <span className={styles.example}>
+                        <strong>Distributor:</strong> "Gulf Pharmaceutical"
+                      </span>
+                      <span className={styles.example}>
+                        <strong>Manufacturer:</strong> "Pfizer"
+                      </span>
+                      <span className={styles.example}>
+                        <strong>Country:</strong> "Germany" or "U.S.A"
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 
@@ -642,25 +1087,27 @@ const SearchPage = () => {
         )}
       </div>
 
-      {/* Keyboard Shortcuts Tooltip Icon */}
-      <div 
-        className={styles.keyboardShortcutsIcon}
-        data-tooltip-id="keyboard-shortcuts-tooltip"
-        data-tooltip-html="
-          <div style='text-align: left;'>
-            <h4 style='margin: 0 0 8px 0; color: #ffffff;'>⌨️ Keyboard Shortcuts</h4>
-            <div style='font-size: 0.85rem; line-height: 1.4;'>
-              <div style='margin-bottom: 4px;'><strong>Ctrl + K</strong> - Focus Search</div>
-              <div style='margin-bottom: 4px;'><strong>Esc</strong> - Clear Search</div>
-              <div style='margin-bottom: 4px;'><strong>↑ ↓</strong> - Navigate Results</div>
-              <div style='margin-bottom: 4px;'><strong>Enter</strong> - Select Medicine</div>
-              <div><strong>Esc</strong> - Close Modal</div>
+      {/* Keyboard Shortcuts Tooltip Icon - Only show when NOT in search results */}
+      {!searchTriggered && (
+        <div 
+          className={styles.keyboardShortcutsIcon}
+          data-tooltip-id="keyboard-shortcuts-tooltip"
+          data-tooltip-html="
+            <div style='text-align: left;'>
+              <h4 style='margin: 0 0 8px 0; color: #ffffff;'>⌨️ Keyboard Shortcuts</h4>
+              <div style='font-size: 0.85rem; line-height: 1.4;'>
+                <div style='margin-bottom: 4px;'><strong>Ctrl + K</strong> - Focus Search</div>
+                <div style='margin-bottom: 4px;'><strong>Esc</strong> - Clear Search</div>
+                <div style='margin-bottom: 4px;'><strong>↑ ↓</strong> - Navigate Results</div>
+                <div style='margin-bottom: 4px;'><strong>Enter</strong> - Select Medicine</div>
+                <div><strong>Esc</strong> - Close Modal</div>
+              </div>
             </div>
-          </div>
-        "
-      >
-        <Keyboard size={20} />
-      </div>
+          "
+        >
+          <Keyboard size={20} />
+        </div>
+      )}
       
       <Tooltip 
         id="keyboard-shortcuts-tooltip" 
@@ -674,6 +1121,14 @@ const SearchPage = () => {
           padding: '12px 16px'
         }} 
       />
+
+      {/* Medicine Details Modal */}
+      {selectedMedicine && (
+        <MedicineDetails 
+          medicine={selectedMedicine} 
+          onBack={() => setSelectedMedicine(null)} 
+        />
+      )}
     </div>
   );
 };

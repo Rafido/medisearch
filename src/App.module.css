@@ -42,3 +42,35 @@
 .readTheDocs {
   color: #888;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .app {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+  
+  .card {
+    padding: 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 0.5rem;
+  }
+  
+  .logo {
+    height: 3em;
+    padding: 0.5em;
+  }
+  
+  .card {
+    padding: 1em;
+  }
+}
