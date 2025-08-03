@@ -246,7 +246,7 @@
 
 .searchInput {
   width: 100%;
-  padding: 1.25rem 200px 1.25rem 3.5rem;
+  padding: 1.25rem 180px 1.25rem 3.5rem;
   border: none;
   border-radius: 16px;
   font-family: var(--font-body);
@@ -276,10 +276,11 @@
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
   z-index: 15;
-  max-width: 180px;
+  max-width: 170px;
+  width: 170px;
 }
 
 .searchActions {
@@ -315,6 +316,7 @@
   z-index: 15;
   height: 36px;
   min-width: 90px;
+  order: 2; /* Ensure search button comes after clear button */
 }
 
 .searchButton::before {
@@ -337,28 +339,25 @@
 }
 
 .clearButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.375rem;
-  padding: 0 0.75rem;
-  margin: 0;
-  background: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
-  z-index: 20;
-  position: relative;
-  height: 36px;
-  min-width: 70px;
-  margin-right: 3.2rem !important;
+width: 36px;
+height: 36px;
+border: none;
+background: transparent;
+color: #64748b;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 6px;
+flex-shrink: 0;
+margin-right: 8px;
+}
+
+/* Text elements that can be hidden on mobile */
+.searchButtonText,
+.clearButtonText {
+  display: inline;
 }
 
 .clearButton:hover {
@@ -932,30 +931,49 @@
   }
   
   .searchInput {
-    padding: 1rem 180px 1rem 3rem;
+    padding: 1rem 120px 1rem 3rem;
     font-size: 16px; /* Prevent zoom on iOS */
   }
-  
+
   .searchButtonsContainer {
-    max-width: 160px;
-  }
-  
-  .searchButton,
+    max-width: 110px;
+    width: 110px;
+    gap: 6px;
+    right: 8px;
+  }  .searchButton,
   .clearButton {
     height: 40px;
     font-size: 0.8rem;
-    min-width: 70px;
+    min-width: 40px;
+    padding: 0 0.5rem;
   }
-  
+
   .searchButton {
-    padding: 0 1rem;
+    min-width: 32px;
+    width: 32px;
+    padding: 0 0.25rem;
+    order: 2; /* Search button comes after clear button */
   }
-  
+
   .clearButton {
-    padding: 0 0.75rem;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+    margin-right: 0 !important; /* Remove the large margin on mobile */
+    order: 1; /* Clear button comes first */
   }
-  
-  /* Mobile suggestions */
+
+  /* Hide button text on mobile to save space */
+  .searchButtonText,
+  .clearButtonText {
+    display: none;
+  }
+
+  /* Hide keyboard shortcuts on mobile since they're not relevant for touch devices */
+  .keyboardShortcutsIcon {
+    display: none;
+  }/* Mobile suggestions */
   .suggestionsDropdown {
     max-height: 250px;
     font-size: 0.9rem;
@@ -1084,31 +1102,47 @@
   }
   
   .searchInput {
-    padding: 0.875rem 150px 0.875rem 2.5rem;
+    padding: 0.875rem 90px 0.875rem 2.5rem;
     font-size: 16px; /* Prevent zoom on iOS */
   }
   
   .searchButtonsContainer {
-    max-width: 130px;
+    max-width: 80px;
     gap: 0.25rem;
+    right: 2px;
   }
-  
+
   .searchButton,
   .clearButton {
     height: 36px;
     font-size: 0.75rem;
-    min-width: 60px;
+    min-width: 36px;
+    padding: 0 0.25rem;
   }
-  
+
   .searchButton {
-    padding: 0 0.75rem;
+    min-width: 36px;
+    padding: 0 0.25rem;
+    order: 2; /* Search button comes after clear button */
   }
-  
+
   .clearButton {
-    padding: 0 0.5rem;
+    min-width: 36px;
+    padding: 0 0.25rem;
+    margin-right: 0 !important; /* Remove the large margin on small mobile */
+    order: 1; /* Clear button comes first */
   }
-  
-  .closeButton {
+
+  /* Hide text on small mobile - show only icons */
+  .searchButtonText,
+  .clearButtonText {
+    display: none;
+  }
+
+  /* Hide keyboard shortcuts on small mobile */
+  .keyboardShortcutsIcon {
+    display: none;
+  }.closeButton {
     padding: 0.5rem;
   }
   
@@ -1668,31 +1702,6 @@
   margin-bottom: 0.25rem;
 }
 
-.clearButton {
-  position: absolute;
-  right: 120px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-  border: 1px solid #cbd5e1;
-  border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #64748b;
-}
-
-.clearButton:hover {
-  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-  color: #475569;
-  /* transform: translateY(-50%) scale(1.1); */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
 .searchButton {
   padding: 1.2rem 2rem;
   background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
@@ -1941,7 +1950,7 @@
 
 .clearButton {
   position: absolute;
-  right: 140px;
+  left: -55px;
   top: 50%;
   transform: translateY(-50%);
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -3918,8 +3927,8 @@ h1 {
   
   .clearButton {
     position: relative;
-    right: auto;
-    top: auto;
+    left: -139px;
+    top: 17px;
     height: 32px;
     min-width: 60px;
     font-size: 0.75rem;
@@ -5510,6 +5519,56 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 0.625rem;
   }
+
+  /* Advanced Filters Mobile Alignment */
+  .advancedFiltersSection {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .advancedFiltersToggle {
+    text-align: left;
+    justify-content: flex-start;
+    padding: 0.875rem 1rem;
+  }
+
+  .filtersGrid {
+    padding: 1rem;
+    text-align: left;
+  }
+
+  .filterGroup {
+    text-align: left;
+  }
+
+  .filterGroupTitle {
+    text-align: left;
+    margin-bottom: 0.75rem;
+  }
+
+  .filterCheckbox {
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .filterActions {
+    justify-content: flex-start;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .filterExamples {
+    text-align: left;
+  }
+
+  .examplesTitle {
+    text-align: left;
+  }
+
+  .examplesList {
+    align-items: flex-start;
+    text-align: left;
+  }
 }
 
 /* Global tooltip z-index fix */
@@ -5540,7 +5599,7 @@ h1 {
   color: var(--neutral-700);
   cursor: pointer;
   transition: var(--transition-smooth);
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .advancedFiltersToggle:hover {
@@ -6255,5 +6314,11 @@ h1 {
     padding-top: 8px;
     width: 100%;
     overflow: visible;
+  }
+
+  /* Ensure advanced filters toggle is left-aligned on mobile */
+  .advancedFiltersToggle {
+    justify-content: flex-start;
+    text-align: left;
   }
 }

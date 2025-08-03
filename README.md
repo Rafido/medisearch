@@ -1,4 +1,4 @@
-# MediSearch - UAE Pharmaceutical Database
+# MedSearch - UAE Pharmaceutical Database
 
 A comprehensive React + TypeScript application for browsing, searching, and generating reports from the UAE pharmaceutical database.
 

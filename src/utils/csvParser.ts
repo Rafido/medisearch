@@ -5,7 +5,7 @@ export interface Medicine {
   strength: string;              // Strength
   dosageForm: string;            // Dosage Form
   packageSize: string;           // Package Size
-  price: number;                 // Package Price to Public
+  price: number;                 // Package Markup (main price to display)
   category?: string;             // Derived from dosage form or generic name
   description?: string;          // Generated from drug info
   sideEffects?: string[];        // Not available in Excel - placeholder
@@ -14,14 +14,13 @@ export interface Medicine {
   dosage?: string;               // Combining strength and dosageForm
   
   // Original fields for compatibility
-  uppScope: boolean;             // Will be derived from Insurance Plan or other logic
-  thiqa: boolean;                // Will be derived from Insurance Plan or other logic  
-  basic: boolean;                // Will be derived from Insurance Plan or other logic
+  uppScope: boolean;             // Derived from UPP Scope
+  thiqa: boolean;                // Derived from Thiqa formulary fields
+  basic: boolean;                // Derived from Basic Drug Formulary
   priorityScore: number;         // Calculated priority score
   
   // New fields from Excel data
   drugCode: string;              // Drug Code (same as id but explicit)
-  greenrainCode?: string;        // Greenrain Code
   insurancePlan?: string;        // Insurance Plan
   genericCode?: string;          // Generic Code
   dispenseMode?: string;         // Dispense Mode
@@ -29,24 +28,48 @@ export interface Medicine {
   packagePriceToPharmacy?: number; // Package Price to Pharmacy
   unitPriceToPublic?: number;    // Unit Price to Public
   unitPriceToPharmacy?: number;  // Unit Price to Pharmacy
+  packageMarkup?: number;        // Package Markup (main price field)
+  unitMarkup?: number;           // Unit Markup
   status?: string;               // Status (Active/Inactive)
   deleteEffectiveDate?: string;  // Delete Effective Date
   lastChangeDate?: number;       // Last Change Date
   agentName?: string;            // Agent Name
   manufacturerName?: string;     // Manufacturer Name (more detailed than manufacturer)
+  
+  // Insurance/Formulary coverage details
+  insuranceCoverage?: string;    // Insurance Coverage For Government Funded Program
+  thiqaFormulary?: boolean;      // Included in Thiqa/ ABM - other than 1&7- Drug Formulary
+  basicFormulary?: boolean;      // Included In Basic Drug Formulary
+  abm1Formulary?: boolean;       // Included In ABM 1 Drug Formulary
+  abm7Formulary?: boolean;       // Included In ABM 7 Drug Formulary
+  
+  // Reimbursement details
+  thiqaMaxReimbursement?: number; // Thiqa Max. Reimbursement Price (Package)
+  thiqaCopay?: number;           // Thiqa co-pay amount (package)
+  basicCopay?: number;           // Basic co-pay amount (package)
+  
+  // UPP details
+  uppEffectiveDate?: number;     // UPP Effective Date
+  uppUpdatedDate?: number;       // UPP Updated Date
+  uppExpiryDate?: number;        // UPP Expiry Date
 }
 
-// Excel parser for Drugs.xlsx
+// Excel parser for Drugs_latest.xlsx
 export const parseExcel = async (excelData: any[]): Promise<Medicine[]> => {
   return excelData.map(row => {
     // Determine category based on dosage form or generic name
     const category = determineDrugCategory(row['Dosage Form'], row['Generic Name']);
     
-    // Determine insurance coverage (placeholder logic - adjust based on your business rules)
-    const insurancePlan = row['Insurance Plan'] || '';
-    const uppScope = insurancePlan.toLowerCase().includes('upp') || Math.random() > 0.7; // Placeholder logic
-    const thiqa = insurancePlan.toLowerCase().includes('thiqa') || Math.random() > 0.6; // Placeholder logic
-    const basic = insurancePlan.toLowerCase().includes('basic') || Math.random() > 0.8; // Placeholder logic
+    // Parse boolean fields from Yes/No strings
+    const uppScope = (row['UPP Scope'] || '').toLowerCase() === 'yes';
+    const thiqaFormulary = (row['Included in Thiqa/ ABM - other than 1&7- Drug Formulary'] || '').toLowerCase() === 'yes';
+    const basicFormulary = (row['Included In Basic Drug Formulary'] || '').toLowerCase() === 'yes';
+    const abm1Formulary = (row['Included In ABM 1 Drug Formulary'] || '').toLowerCase() === 'yes';
+    const abm7Formulary = (row['Included In ABM 7 Drug Formulary'] || '').toLowerCase() === 'yes';
+    
+    // Legacy compatibility - use formulary inclusion for thiqa and basic
+    const thiqa = thiqaFormulary || abm1Formulary || abm7Formulary;
+    const basic = basicFormulary;
     
     // Calculate priority score
     let priorityScore = 0;
@@ -62,6 +85,16 @@ export const parseExcel = async (excelData: any[]): Promise<Medicine[]> => {
     const packagePriceToPharmacy = parseFloat(row['Package Price to Pharmacy'] || '0') || 0;
     const unitPriceToPublic = parseFloat(row['Unit Price to Public'] || '0') || 0;
     const unitPriceToPharmacy = parseFloat(row['Unit Price to Pharmacy'] || '0') || 0;
+    const packageMarkup = parseFloat(row['Package Markup'] || '0') || 0;
+    const unitMarkup = parseFloat(row['Unit Markup'] || '0') || 0;
+    
+    // Parse reimbursement and copay amounts
+    const thiqaMaxReimbursement = parseFloat(row['Thiqa Max. Reimbursement Price (Package)'] || '0') || 0;
+    const thiqaCopay = parseFloat(row['Thiqa co-pay amount (package)'] || '0') || 0;
+    const basicCopay = parseFloat(row['Basic co-pay amount (package)'] || '0') || 0;
+    
+    // Use Package Markup as the main price, fallback to Package Price to Public
+    const mainPrice = packageMarkup > 0 ? packageMarkup : packagePriceToPublic;
 
     const medicine: Medicine = {
       // Core fields
@@ -69,11 +102,11 @@ export const parseExcel = async (excelData: any[]): Promise<Medicine[]> => {
       name: row['Package Name'] || '',
       genericName: row['Generic Name'] || '',
       strength: row['Strength'] || '',
-      dosageForm: row['Dosage Form'] || '',
+      dosageForm: (row['Dosage Form'] || '').trim(),
       packageSize: row['Package Size'] || '',
-      price: packagePriceToPublic,
+      price: mainPrice, // Use Package Markup as requested
       category,
-      dosage: `${row['Strength'] || ''} ${row['Dosage Form'] || ''}`.trim(),
+      dosage: `${row['Strength'] || ''} ${(row['Dosage Form'] || '').trim()}`.trim(),
       inStock,
       manufacturer: row['Manufacturer Name'] || 'Unknown',
       
@@ -85,7 +118,6 @@ export const parseExcel = async (excelData: any[]): Promise<Medicine[]> => {
       
       // Excel-specific fields
       drugCode: row['Drug Code'] || '',
-      greenrainCode: row['Greenrain Code'] || '',
       insurancePlan: row['Insurance Plan'] || '',
       genericCode: row['Generic Code'] || '',
       dispenseMode: row['Dispense Mode'] || '',
@@ -93,11 +125,30 @@ export const parseExcel = async (excelData: any[]): Promise<Medicine[]> => {
       packagePriceToPharmacy,
       unitPriceToPublic,
       unitPriceToPharmacy,
+      packageMarkup,
+      unitMarkup,
       status: row['Status'] || '',
       deleteEffectiveDate: row['Delete Effective Date'] || '',
-      lastChangeDate: row['Last Change Date'] || 0,
+      lastChangeDate: parseFloat(row['Last Change Date'] || '0') || 0,
       agentName: row['Agent Name'] || '',
       manufacturerName: row['Manufacturer Name'] || '',
+      
+      // Insurance/Formulary coverage details
+      insuranceCoverage: row['Insurance Coverage For Government Funded Program'] || '',
+      thiqaFormulary,
+      basicFormulary,
+      abm1Formulary,
+      abm7Formulary,
+      
+      // Reimbursement details
+      thiqaMaxReimbursement,
+      thiqaCopay,
+      basicCopay,
+      
+      // UPP details
+      uppEffectiveDate: parseFloat(row['UPP Effective Date'] || '0') || 0,
+      uppUpdatedDate: parseFloat(row['UPP Updated Date'] || '0') || 0,
+      uppExpiryDate: parseFloat(row['UPP Expiry Date'] || '0') || 0,
     };
     
     return medicine;
@@ -179,9 +230,9 @@ export const parseCSV = async (csvText: string): Promise<Medicine[]> => {
       thiqa,
       basic,
       priorityScore,
+      
       // Excel fields set to defaults for CSV
-      drugCode: row['DOH Drug Code'] || '',
-      greenrainCode: '',
+      drugCode: row['Greenrain Code'] || '',
       insurancePlan: '',
       genericCode: '',
       dispenseMode: '',
@@ -189,11 +240,24 @@ export const parseCSV = async (csvText: string): Promise<Medicine[]> => {
       packagePriceToPharmacy: 0,
       unitPriceToPublic: 0,
       unitPriceToPharmacy: 0,
+      packageMarkup: parseFloat((row['Package Markup'] || '0').replace(/,/g, '')),
+      unitMarkup: 0,
       status: 'Active',
       deleteEffectiveDate: '',
       lastChangeDate: 0,
       agentName: '',
       manufacturerName: 'UAE Pharmacy',
+      insuranceCoverage: '',
+      thiqaFormulary: thiqa,
+      basicFormulary: basic,
+      abm1Formulary: false,
+      abm7Formulary: false,
+      thiqaMaxReimbursement: 0,
+      thiqaCopay: 0,
+      basicCopay: 0,
+      uppEffectiveDate: 0,
+      uppUpdatedDate: 0,
+      uppExpiryDate: 0,
     };
     
     return medicine;

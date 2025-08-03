@@ -1,15 +1,19 @@
-const XLSX = require('xlsx');
-const fs = require('fs');
-const path = require('path');
+import XLSX from 'xlsx';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Function to analyze the Excel file
 function analyzeExcelFile() {
   try {
-    const filePath = path.join(process.cwd(), 'public', 'Drugs.xlsx');
+    const filePath = path.join(__dirname, '..', 'public', 'Drugs_latest.xlsx');
     
     // Check if file exists
     if (!fs.existsSync(filePath)) {
-      console.error('Drugs.xlsx file not found in public directory');
+      console.error('Drugs_latest.xlsx file not found in public directory');
       return;
     }
 

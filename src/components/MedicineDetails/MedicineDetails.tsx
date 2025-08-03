@@ -72,11 +72,6 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
                 <span className={styles.detailLabel}>Generic Code</span>
                 <span className={styles.detailValue}>{medicine.genericCode || 'N/A'}</span>
               </div>
-              
-              <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Greenrain Code</span>
-                <span className={styles.detailValue}>{medicine.greenrainCode || 'N/A'}</span>
-              </div>
 
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Dispense Mode</span>
@@ -89,8 +84,13 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
               <h3 className={styles.sectionTitle}>Pricing Information</h3>
               
               <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Package Markup (Main Price)</span>
+                <span className={styles.priceValue}>AED {(medicine.packageMarkup || medicine.price || 0).toFixed(2)}</span>
+              </div>
+              
+              <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Package Price (Public)</span>
-                <span className={styles.priceValue}>AED {(medicine.packagePriceToPublic || medicine.price || 0).toFixed(2)}</span>
+                <span className={styles.priceValue}>AED {(medicine.packagePriceToPublic || 0).toFixed(2)}</span>
               </div>
               
               <div className={styles.detailItem}>
@@ -107,6 +107,13 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
                 <span className={styles.detailLabel}>Unit Price (Pharmacy)</span>
                 <span className={styles.priceValue}>AED {(medicine.unitPriceToPharmacy || 0).toFixed(2)}</span>
               </div>
+
+              {medicine.unitMarkup && medicine.unitMarkup > 0 && (
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Unit Markup</span>
+                  <span className={styles.priceValue}>AED {medicine.unitMarkup.toFixed(2)}</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -177,7 +184,19 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
               <h3 className={styles.sectionTitle}>Insurance Coverage</h3>
               
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Coverage</span>
+                <span className={styles.detailLabel}>UPP Scope</span>
+                <span className={`${styles.detailValue} ${medicine.uppScope ? styles.covered : styles.notCovered}`}>
+                  {medicine.uppScope ? 'Yes' : 'No'}
+                </span>
+              </div>
+
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Insurance Coverage</span>
+                <span className={styles.detailValue}>{medicine.insuranceCoverage || 'N/A'}</span>
+              </div>
+              
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Coverage Badges</span>
                 <div className={styles.coverageBadges}>
                   {medicine.uppScope && <span className={styles.uppBadge}>UPP</span>}
                   {medicine.thiqa && <span className={styles.thiqaBadge}>Thiqa</span>}
@@ -188,6 +207,101 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
                 </div>
               </div>
             </div>
+
+            {/* Formulary Information */}
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>Drug Formulary Inclusion</h3>
+              
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Thiqa/ABM Formulary</span>
+                <span className={`${styles.detailValue} ${medicine.thiqaFormulary ? styles.included : styles.notIncluded}`}>
+                  {medicine.thiqaFormulary ? 'Included' : 'Not Included'}
+                </span>
+              </div>
+
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Basic Drug Formulary</span>
+                <span className={`${styles.detailValue} ${medicine.basicFormulary ? styles.included : styles.notIncluded}`}>
+                  {medicine.basicFormulary ? 'Included' : 'Not Included'}
+                </span>
+              </div>
+
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>ABM 1 Formulary</span>
+                <span className={`${styles.detailValue} ${medicine.abm1Formulary ? styles.included : styles.notIncluded}`}>
+                  {medicine.abm1Formulary ? 'Included' : 'Not Included'}
+                </span>
+              </div>
+
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>ABM 7 Formulary</span>
+                <span className={`${styles.detailValue} ${medicine.abm7Formulary ? styles.included : styles.notIncluded}`}>
+                  {medicine.abm7Formulary ? 'Included' : 'Not Included'}
+                </span>
+              </div>
+            </div>
+
+            {/* Reimbursement Information */}
+            {(medicine.thiqaMaxReimbursement || medicine.thiqaCopay || medicine.basicCopay) && (
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>Reimbursement & Co-pay</h3>
+                
+                {medicine.thiqaMaxReimbursement && medicine.thiqaMaxReimbursement > 0 && (
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Thiqa Max Reimbursement</span>
+                    <span className={styles.priceValue}>AED {medicine.thiqaMaxReimbursement.toFixed(2)}</span>
+                  </div>
+                )}
+
+                {medicine.thiqaCopay && medicine.thiqaCopay > 0 && (
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Thiqa Co-pay</span>
+                    <span className={styles.priceValue}>AED {medicine.thiqaCopay.toFixed(2)}</span>
+                  </div>
+                )}
+
+                {medicine.basicCopay && medicine.basicCopay > 0 && (
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Basic Co-pay</span>
+                    <span className={styles.priceValue}>AED {medicine.basicCopay.toFixed(2)}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* UPP Information */}
+            {(medicine.uppEffectiveDate || medicine.uppUpdatedDate || medicine.uppExpiryDate) && (
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>UPP Dates</h3>
+                
+                {medicine.uppEffectiveDate && medicine.uppEffectiveDate > 0 && (
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>UPP Effective Date</span>
+                    <span className={styles.detailValue}>
+                      {new Date((medicine.uppEffectiveDate - 25569) * 86400 * 1000).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
+
+                {medicine.uppUpdatedDate && medicine.uppUpdatedDate > 0 && (
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>UPP Updated Date</span>
+                    <span className={styles.detailValue}>
+                      {new Date((medicine.uppUpdatedDate - 25569) * 86400 * 1000).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
+
+                {medicine.uppExpiryDate && medicine.uppExpiryDate > 0 && (
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>UPP Expiry Date</span>
+                    <span className={styles.detailValue}>
+                      {new Date((medicine.uppExpiryDate - 25569) * 86400 * 1000).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

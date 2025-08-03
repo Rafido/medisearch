@@ -127,17 +127,15 @@
 }
 
 .logoIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
+  width: 200px;
   height: 64px;
-  background: var(--gradient-primary);
-  border-radius: 16px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
-  box-shadow: var(--shadow-medium);
-  color: white;
+  background: transparent;
   animation: pulse 2s ease-in-out infinite;
+  filter: brightness(1.1) contrast(1.1);
 }
 
 @keyframes pulse {
@@ -346,8 +344,9 @@
   }
   
   .logoIcon {
-    width: 56px;
+    width: 160px;
     height: 56px;
+    padding: 6px;
   }
   
   .title {

@@ -540,7 +540,7 @@ const SearchPage = () => {
                   <X size={24} />
                 </button>
                 <div className={styles.searchResultsTitle}>
-                  <h2>{searchQuery}"</h2>
+                  <h2>{searchQuery}</h2>
                   <span className={styles.resultsCount}>
                     {filteredMedicines.length > 0 ? (
                       <>
@@ -805,19 +805,28 @@ const SearchPage = () => {
                       type="button" 
                       onClick={handleClearSearch}
                       className={styles.clearButton}
+                      aria-label="Clear search"
+                      title="Clear search"
                     >
-                      <AlertCircle size={18} />
-                      Clear
+                      <X size={18} />
                     </button>
                   )}
                   
-                  <button type="submit" className={styles.searchButton} disabled={isLoading}>
+                  <button 
+                    type="submit" 
+                    className={styles.searchButton} 
+                    disabled={isLoading}
+                    aria-label={isLoading ? 'Searching...' : 'Search medicines'}
+                    title={isLoading ? 'Searching...' : 'Search medicines'}
+                  >
                     {isLoading ? (
                       <RefreshCw className="animate-spin" size={20} />
                     ) : (
                       <Search size={20} />
                     )}
-                    {isLoading ? 'Searching...' : 'Search'}
+                    <span className={styles.searchButtonText}>
+                      {isLoading ? 'Searching...' : 'Search'}
+                    </span>
                   </button>
                 </div>
                 
@@ -1087,7 +1096,7 @@ const SearchPage = () => {
         )}
       </div>
 
-      {/* Keyboard Shortcuts Tooltip Icon - Only show when NOT in search results */}
+      {/* Keyboard Shortcuts Tooltip Icon - Hidden on mobile since touch devices don't use keyboard shortcuts */}
       {!searchTriggered && (
         <div 
           className={styles.keyboardShortcutsIcon}

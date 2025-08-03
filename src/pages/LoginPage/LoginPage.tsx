@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Lock, User, Shield, ArrowRight, AlertCircle } from 'lucide-react';
-import { AUTH_STORAGE, validateCredentials } from '../../utils/auth';
+import { Eye, EyeOff, Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
+import { AUTH_STORAGE, validateCredentials, getUserRole } from '../../utils/auth';
 import styles from './LoginPage.module.css';
 
 interface LoginPageProps {
@@ -24,12 +24,13 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
     if (validateCredentials(username.trim(), password)) {
       try {
+        const userRole = getUserRole(username.trim(), password);
         // Store authentication data using AUTH_STORAGE
         AUTH_STORAGE.setAuthData(true, {
-          username: 'admin',
-          name: 'Administrator',
-          email: 'admin@smartmedicine.ae',
-          role: 'administrator',
+          username: username.trim(),
+          name: userRole,
+          email: `${username.toLowerCase()}@medsearch.ae`,
+          role: userRole.toLowerCase().replace(' ', '_'),
           loginTime: new Date().toISOString()
         });
         
@@ -51,10 +52,11 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
       
       <div className={styles.loginCard}>
         <div className={styles.logoSection}>
-          <div className={styles.logoIcon}>
-            <Shield size={32} />
-          </div>
-          <h1 className={styles.title}>Smart Medicine Finder</h1>
+          <img 
+            src="/medsearch logo.png" 
+            alt="MedSearch" 
+            className={styles.logoIcon}
+          />
           <p className={styles.subtitle}>Secure Admin Access</p>
         </div>
 
@@ -130,9 +132,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
         <div className={styles.footer}>
           <div className={styles.helpText}>
-            <p>Demo Credentials:</p>
-            <p><strong>Username:</strong> admin</p>
-            <p><strong>Password:</strong> Admin@123</p>
+            <p>For access credentials, please contact your system administrator.</p>
           </div>
         </div>
       </div>

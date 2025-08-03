@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Search, Download, Filter, RefreshCw, Database, Eye, ChevronRight, FileText } from 'lucide-react';
+import { Search, Download, Filter, RefreshCw, Database, Eye, ChevronRight } from 'lucide-react';
 import { useMedicines } from '../../hooks/useMedicines';
-import { ReportGenerator } from '../../components/ReportGenerator';
 import type { Medicine } from '../../utils/csvParser';
 import styles from './DatabasePage.module.css';
 
@@ -11,7 +10,6 @@ const DatabasePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(50);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [showReports, setShowReports] = useState(false);
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
 
   const { medicines, isLoading: loading } = useMedicines();
@@ -85,7 +83,7 @@ const DatabasePage = () => {
         <div className={styles.headerContent}>
           <div className={styles.headerInfo}>
             <div className={styles.breadcrumb}>
-              <span>MediSearch</span>
+              <span>MedSearch</span>
               <ChevronRight size={16} />
               <span className={styles.currentPage}>Database</span>
             </div>
@@ -132,14 +130,6 @@ const DatabasePage = () => {
         </div>
 
         <div className={styles.actionButtons}>
-          <button 
-            onClick={() => setShowReports(!showReports)}
-            className={`${styles.actionButton} ${showReports ? styles.active : ''}`}
-            title="Generate PDF Reports"
-          >
-            <FileText size={18} />
-            PDF Reports
-          </button>
           <button 
             onClick={handleRefresh}
             className={styles.actionButton}
@@ -272,27 +262,6 @@ const DatabasePage = () => {
             >
               Next
             </button>
-          </div>
-        </div>
-      )}
-
-      {/* PDF Reports Modal */}
-      {showReports && (
-        <div className={styles.modalOverlay} onClick={() => setShowReports(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>PDF Report Generator</h2>
-              <button 
-                className={styles.closeButton}
-                onClick={() => setShowReports(false)}
-                title="Close"
-              >
-                ×
-              </button>
-            </div>
-            <div className={styles.modalBody}>
-              <ReportGenerator medicines={medicines} onClose={() => setShowReports(false)} />
-            </div>
           </div>
         </div>
       )}

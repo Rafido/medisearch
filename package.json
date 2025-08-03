@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "convert-csv": "node scripts/convertCsvToJson.js",
-    "convert-excel": "node scripts/convertExcelToJson.cjs",
+    "convert-excel": "node scripts/convertExcelToJson.js",
     "convert-excel-auto": "node scripts/convertExcelAdvanced.cjs",
     "update-data": "./update-database.sh",
     "validate-data": "node scripts/validateData.cjs"

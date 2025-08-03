@@ -77,12 +77,25 @@ export const AUTH_STORAGE = {
 };
 
 // Valid credentials
-export const VALID_CREDENTIALS = {
-  username: 'admin',
-  password: 'Admin@123'
-};
+export const VALID_CREDENTIALS = [
+  { username: 'admin', password: 'MedSearch@2025', role: 'Administrator' },
+  { username: 'doctor', password: 'Doctor#123', role: 'Healthcare Professional' },
+  { username: 'pharmacist', password: 'Pharma$456', role: 'Pharmacist' },
+  { username: 'manager', password: 'Manager@789', role: 'Database Manager' },
+  { username: 'guest', password: 'Guest#2025', role: 'Guest User' }
+];
 
 // Validate login credentials
 export const validateCredentials = (username: string, password: string): boolean => {
-  return username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password;
+  return VALID_CREDENTIALS.some(cred => 
+    cred.username === username && cred.password === password
+  );
+};
+
+// Get user role by credentials
+export const getUserRole = (username: string, password: string): string => {
+  const user = VALID_CREDENTIALS.find(cred => 
+    cred.username === username && cred.password === password
+  );
+  return user ? user.role : 'Guest';
 };

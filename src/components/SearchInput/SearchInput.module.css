@@ -6,16 +6,17 @@
 }
 
 .inputWrapper {
-  position: relative;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   background: white;
   border: 2px solid #e1e5e9;
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 56px; /* Fixed height for uniformity */
+  height: 56px;
+  /* Fixed height for uniformity */
+  gap: 0;
 }
 
 .inputWrapper:focus-within {
@@ -24,8 +25,8 @@
 }
 
 .searchInput {
-  flex: 1;
-  padding: 0 20px;
+  flex: 1 1 auto;
+  padding: 0 16px;
   border: none;
   outline: none;
   font-size: 16px;
@@ -33,13 +34,42 @@
   background: transparent;
   color: #2d3748;
   height: 100%;
-  min-height: 56px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .searchInput::placeholder {
   color: #a0aec0;
 }
 
+/* Clear Button */
+.clearButton {
+width: 36px;
+height: 36px;
+border: none;
+background: transparent;
+color: #64748b;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 6px;
+flex-shrink: 0;
+margin-right: 8px;
+}
+
+.clearButton:hover {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.clearIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Search Button */
 .searchButton {
   width: 56px;
   border: none;
@@ -53,6 +83,8 @@
   font-size: 16px;
   padding: 0;
   flex-shrink: 0;
+  border-radius: 0 10px 10px 0;
+  margin-right: 0;
 }
 
 .searchButton:hover {
@@ -109,6 +141,7 @@
 
 .category {
   color: #64748b;
+
   &:before {
     content: "•";
     margin-right: 8px;
@@ -235,25 +268,29 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  .inputWrapper {
+    height: 44px;
+  }
+
   .searchInput {
-    padding: 14px 16px;
-    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 0 10px;
+    font-size: 16px;
+    /* Prevent zoom on iOS */
   }
-  
+
+  .clearButton {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+  }
+
+  .clearIcon {
+    width: 12px;
+    height: 12px;
+  }
+
   .searchButton {
-    padding: 14px 16px;
-  }
-  
-  .suggestionItem {
-    padding: 12px 16px;
-  }
-  
-  .medicineName {
-    font-size: 15px;
-  }
-  
-  .medicineGeneric,
-  .medicinePrice {
-    font-size: 13px;
+    width: 36px;
+    min-width: 36px;
   }
 }

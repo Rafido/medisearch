@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import SearchPage from './pages/SearchPage/SearchPage';
 import DatabasePage from './pages/DatabasePage/DatabasePage';
+import ReportsPage from './pages/ReportsPage/ReportsPage';
 import LoginPage from './pages/LoginPage';
 import { AUTH_STORAGE } from './utils/auth';
 import './App.css';
@@ -162,6 +163,7 @@ function App() {
           <Routes>
             <Route path="/" element={<SearchPage />} />
             <Route path="/database" element={<DatabasePage />} />
+            <Route path="/reports" element={<ReportsPage />} />
           </Routes>
         </main>
         <Footer />

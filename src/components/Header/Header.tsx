@@ -1,137 +1,310 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Search, Database, HelpCircle } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { User, LogOut, ChevronDown, Bell, Search, Menu, X, Database, FileText } from 'lucide-react';
 import styles from './Header.module.css';
-import medicineIcon from '../../assets/medicine-icon.svg';
 
-const Header: React.FC = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+interface User {
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
+interface HeaderProps {
+  user?: User | null;
+  onSignIn?: () => void;
+  onSignOut?: () => void;
+}
+
+const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
-  const handleLoginLogout = () => {
-    setLoggedIn(!loggedIn);
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
-  // Close mobile menu when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
         setIsMobileMenuOpen(false);
       }
     };
 
-    if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isMobileMenuOpen]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-  // Close mobile menu on escape key
+  // Close dropdown on escape key
   useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isMobileMenuOpen) {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsDropdownOpen(false);
         setIsMobileMenuOpen(false);
       }
     };
 
-    window.addEventListener('keydown', handleEscapeKey);
-    return () => {
-      window.removeEventListener('keydown', handleEscapeKey);
-    };
-  }, [isMobileMenuOpen]);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsDropdownOpen(false);
+  };
+
+  const handleSignOut = () => {
+    setIsDropdownOpen(false);
+    onSignOut?.();
+  };
+
+  const handleSignIn = () => {
+    setIsDropdownOpen(false);
+    onSignIn?.();
+  };
+
+  // Generate initials from name
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <header className={styles.header}>
-      <div className={styles.left}>
-        <img src={medicineIcon} alt="Medicine Database Logo" className={styles.logo} />
-        <span className={styles.appName}>UPP Medicine Database</span>
-      </div>
-      
-      <div className={styles.center}>
-        <span className={styles.tagline}>Universal Prescription Program</span>
-      </div>
-      
-      {/* Desktop Navigation */}
-      <nav className={styles.navigation}>
-        <a href="/" className={styles.navLink}>
-          <Search size={18} />
-          Search
-        </a>
-        <a href="/database" className={styles.navLink}>
-          <Database size={18} />
-          Database
-        </a>
-        <a href="/help" className={styles.navLink}>
-          <HelpCircle size={18} />
-          Help
-        </a>
-      </nav>
-      
-      <div className={styles.right}>
+      <div className={styles.headerContent}>
+        {/* Professional Logo Section */}
+                                            <div className={styles.logoSection}>
+            <img 
+              src="/medsearch logo.png" 
+              alt="MedSearch" 
+              className={styles.logoIcon}
+            />
+          </div>        {/* Navigation Menu */}
+        <nav className={styles.navigation}>
+          <ul className={styles.navList}>
+            <li className={styles.navItem}>
+              <Link 
+                to="/" 
+                className={`${styles.navLink} ${location.pathname === '/' ? styles.active : ''}`}
+              >
+                <Search size={16} />
+                Search
+              </Link>
+            </li>
+            <li className={styles.navItem}>
+              <Link 
+                to="/database" 
+                className={`${styles.navLink} ${location.pathname === '/database' ? styles.active : ''}`}
+              >
+                <Database size={16} />
+                Database
+              </Link>
+            </li>
+            <li className={styles.navItem}>
+              <Link 
+                to="/reports" 
+                className={`${styles.navLink} ${location.pathname === '/reports' ? styles.active : ''}`}
+              >
+                <FileText size={16} />
+                Reports
+              </Link>
+            </li>
+            {/* <li className={styles.navItem}>
+              <a href="#" className={styles.navLink}>
+                <HelpCircle size={16} />
+                Help
+              </a>
+            </li> */}
+          </ul>
+        </nav>
+
         {/* Mobile Menu Button */}
         <button 
           className={styles.mobileMenuButton}
           onClick={toggleMobileMenu}
-          aria-label="Toggle navigation menu"
-          aria-expanded={isMobileMenuOpen}
+          aria-label="Toggle mobile menu"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        
-        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" className={styles.avatar} />
-        <button className={styles.loginBtn} onClick={handleLoginLogout}>
-          {loggedIn ? 'Logout' : 'Login'}
-        </button>
+
+        {/* User Section */}
+        <div className={styles.userSection}>
+          {user ? (
+            <div className={styles.userActions}>
+              {/* Notifications */}
+              <div className={styles.notificationContainer}>
+                <button
+                  className={`${styles.notificationButton} ${styles.disabled}`}
+                  disabled
+                  aria-label="Notifications (disabled)"
+                >
+                  <Bell size={20} />
+                </button>
+
+                {/* Notification dropdown disabled */}
+              </div>
+
+              {/* User Menu */}
+              <div className={styles.userMenu} ref={dropdownRef}>
+                <button
+                  className={styles.userButton}
+                  onClick={toggleDropdown}
+                  aria-expanded={isDropdownOpen}
+                >
+                  <div className={styles.userAvatar}>
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.name} className={styles.avatarImage} />
+                    ) : (
+                      <span className={styles.avatarText}>
+                        {getInitials(user.name)}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.userInfo}>
+                    <span className={styles.userName}>{user.name}</span>
+                    <span className={styles.userRole}>Healthcare Professional</span>
+                  </div>
+                  <ChevronDown 
+                    className={`${styles.chevronIcon} ${isDropdownOpen ? styles.rotated : ''}`}
+                    size={16}
+                  />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className={styles.userDropdown}>
+                    <div className={styles.dropdownSection}>
+                      <div className={styles.userProfile}>
+                        <div className={styles.profileAvatar}>
+                          {user.avatar ? (
+                            <img src={user.avatar} alt={user.name} />
+                          ) : (
+                            <span>{getInitials(user.name)}</span>
+                          )}
+                        </div>
+                        <div className={styles.profileInfo}>
+                          <h4>{user.name}</h4>
+                          <p>{user.email}</p>
+                          <span className={styles.profileBadge}>Verified</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={styles.dropdownDivider}></div>
+
+                    <div className={styles.dropdownSection}>
+                      <button className={styles.dropdownItem} onClick={handleSignOut}>
+                        <LogOut size={16} />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className={styles.authButtons}>
+              <button className={styles.signInButton} onClick={handleSignIn}>
+                <User size={16} />
+                Sign In
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Mobile Menu */}
-      <div 
-        ref={mobileMenuRef}
-        className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.open : ''}`}
-      >
-        <ul className={styles.mobileMenuList}>
-          <li className={styles.mobileMenuItem}>
-            <a 
-              href="/" 
-              className={styles.mobileMenuLink}
-              onClick={closeMobileMenu}
-            >
-              <Search size={20} />
-              Search
-            </a>
-          </li>
-          <li className={styles.mobileMenuItem}>
-            <a 
-              href="/database" 
-              className={styles.mobileMenuLink}
-              onClick={closeMobileMenu}
-            >
-              <Database size={20} />
-              Database
-            </a>
-          </li>
-          <li className={styles.mobileMenuItem}>
-            <a 
-              href="/help" 
-              className={styles.mobileMenuLink}
-              onClick={closeMobileMenu}
-            >
-              <HelpCircle size={20} />
-              Help
-            </a>
-          </li>
-        </ul>
-      </div>
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div className={styles.mobileMenu} ref={mobileMenuRef}>
+          <div className={styles.mobileMenuContent}>
+            <nav className={styles.mobileNavigation}>
+              <ul className={styles.mobileNavList}>
+                <li className={styles.mobileNavItem}>
+                  <Link 
+                    to="/" 
+                    className={`${styles.mobileNavLink} ${location.pathname === '/' ? styles.active : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Search size={20} />
+                    <span>Search Medicines</span>
+                  </Link>
+                </li>
+                <li className={styles.mobileNavItem}>
+                  <Link 
+                    to="/database" 
+                    className={`${styles.mobileNavLink} ${location.pathname === '/database' ? styles.active : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Database size={20} />
+                    <span>Database</span>
+                  </Link>
+                </li>
+                <li className={styles.mobileNavItem}>
+                  <Link 
+                    to="/reports" 
+                    className={`${styles.mobileNavLink} ${location.pathname === '/reports' ? styles.active : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <FileText size={20} />
+                    <span>Reports</span>
+                  </Link>
+                </li>
+                {/* <li className={styles.mobileNavItem}>
+                  <a 
+                    href="#" 
+                    className={styles.mobileNavLink}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <HelpCircle size={20} />
+                    <span>Help & Support</span>
+                  </a>
+                </li> */}
+              </ul>
+            </nav>
+
+            {/* Mobile User Section */}
+            {/* {user ? (
+              <div className={styles.mobileUserSection}>
+                <div className={styles.mobileUserInfo}>
+                  <div className={styles.mobileUserAvatar}>
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.name} />
+                    ) : (
+                      <span>{getInitials(user.name)}</span>
+                    )}
+                  </div>
+                  <div className={styles.mobileUserDetails}>
+                    <div className={styles.mobileUserName}>{user.name}</div>
+                    <div className={styles.mobileUserEmail}>{user.email}</div>
+                  </div>
+                </div>
+                <div className={styles.mobileUserActions}>
+                  <button className={styles.mobileActionButton} onClick={handleSignOut}>
+                    <LogOut size={18} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.mobileAuthSection}>
+                <button className={styles.mobileSignInButton} onClick={handleSignIn}>
+                  <User size={18} />
+                  <span>Sign In</span>
+                </button>
+              </div>
+            )} */}
+          </div>
+        </div>
+      )}
     </header>
   );
 };

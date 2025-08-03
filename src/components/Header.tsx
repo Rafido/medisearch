@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, Shield, User, Settings, LogOut, ChevronDown, Bell, Search, Menu, X, Database, HelpCircle } from 'lucide-react';
+import { Heart, Shield, LogOut, ChevronDown, Bell, Search, Menu, X, Database, HelpCircle, FileText } from 'lucide-react';
 import styles from './Header.module.css';
 
 interface User {
@@ -104,7 +104,7 @@ const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
             </div>
           </div>
           <div className={styles.logoText}>
-            <h1 className={styles.brandName}>MediSearch</h1>
+            <h1 className={styles.brandName}>MedSearch</h1>
             <span className={styles.brandTagline}>UAE Pharmaceutical Database</span>
           </div>
         </div>
@@ -131,11 +131,20 @@ const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
               </Link>
             </li>
             <li className={styles.navItem}>
+              <Link 
+                to="/reports" 
+                className={`${styles.navLink} ${location.pathname === '/reports' ? styles.active : ''}`}
+              >
+                <FileText size={16} />
+                Reports
+              </Link>
+            </li>
+            {/* <li className={styles.navItem}>
               <a href="#" className={styles.navLink}>
                 <HelpCircle size={16} />
                 Help
               </a>
-            </li>
+            </li> */}
           </ul>
         </nav>
 
@@ -247,6 +256,7 @@ const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
                     <div className={styles.dropdownDivider}></div>
 
                     <div className={styles.dropdownSection}>
+                      {/* Profile, Settings, and Privacy menu items temporarily disabled 
                       <button className={styles.dropdownItem}>
                         <User size={16} />
                         <span>My Profile</span>
@@ -259,6 +269,7 @@ const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
                         <Shield size={16} />
                         <span>Privacy</span>
                       </button>
+                      */}
                     </div>
 
                     <div className={styles.dropdownDivider}></div>
@@ -311,6 +322,16 @@ const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
                   </Link>
                 </li>
                 <li className={styles.mobileNavItem}>
+                  <Link 
+                    to="/reports" 
+                    className={`${styles.mobileNavLink} ${location.pathname === '/reports' ? styles.active : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <FileText size={20} />
+                    <span>Reports</span>
+                  </Link>
+                </li>
+                {/* <li className={styles.mobileNavItem}>
                   <a 
                     href="#" 
                     className={styles.mobileNavLink}
@@ -319,12 +340,12 @@ const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
                     <HelpCircle size={20} />
                     <span>Help & Support</span>
                   </a>
-                </li>
+                </li> */}
               </ul>
             </nav>
 
             {/* Mobile User Section */}
-            {user ? (
+            {/* {user ? (
               <div className={styles.mobileUserSection}>
                 <div className={styles.mobileUserInfo}>
                   <div className={styles.mobileUserAvatar}>
@@ -357,7 +378,7 @@ const Header = ({ user, onSignIn, onSignOut }: HeaderProps) => {
                   <span>Sign In</span>
                 </button>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       )}

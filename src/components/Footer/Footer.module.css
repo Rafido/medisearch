@@ -75,31 +75,13 @@
 }
 
 .logoIcon {
-  position: relative;
-  width: 40px;
+  width: 120px;
   height: 40px;
-  background: linear-gradient(135deg, var(--footer-primary) 0%, var(--footer-primary-hover) 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-medium);
-}
-
-.heartIcon {
-  color: white;
-  z-index: 2;
-}
-
-.shieldIcon {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  color: rgba(255, 255, 255, 0.9);
-  background: var(--footer-success);
-  border-radius: 50%;
-  padding: 1px;
-  z-index: 3;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 8px;
+  background: transparent;
+  filter: brightness(1.1) contrast(1.1);
 }
 
 .logoText {
@@ -322,5 +304,190 @@
   
   .contactInfo {
     align-items: center;
+  }
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: white;
+  border-radius: 16px;
+  box-shadow: var(--shadow-strong);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--neutral-200);
+  background: var(--neutral-50);
+}
+
+.modalTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin: 0;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--neutral-300);
+  border-radius: 8px;
+  color: var(--neutral-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.closeButton:hover {
+  background: var(--neutral-200);
+  color: var(--neutral-800);
+}
+
+.modalBody {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  color: var(--neutral-700);
+  line-height: 1.6;
+}
+
+.modalBody h3 {
+  color: var(--neutral-800);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+}
+
+.modalBody h3:first-child {
+  margin-top: 0;
+}
+
+.modalBody p {
+  margin: 0 0 1rem 0;
+}
+
+.modalBody ul {
+  margin: 0.5rem 0 1rem 1.5rem;
+  padding: 0;
+}
+
+.modalBody li {
+  margin: 0.25rem 0;
+}
+
+.modalBody strong {
+  color: var(--footer-primary);
+  font-weight: 600;
+}
+
+.modalFooter {
+  padding: 1rem 2rem;
+  border-top: 1px solid var(--neutral-200);
+  background: var(--neutral-50);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modalCloseButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--footer-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.modalCloseButton:hover {
+  background: var(--footer-primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Update legal links to work as buttons */
+.legalLink {
+  background: none;
+  border: none;
+  color: var(--neutral-400);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+  font-family: inherit;
+}
+
+.legalLink:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Mobile responsiveness for modals */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 0.5rem;
+  }
+  
+  .modalContent {
+    max-height: 90vh;
+  }
+  
+  .modalHeader {
+    padding: 1rem 1.5rem;
+  }
+  
+  .modalTitle {
+    font-size: 1.1rem;
+  }
+  
+  .modalBody {
+    padding: 1.5rem;
+  }
+  
+  .modalFooter {
+    padding: 0.75rem 1.5rem;
   }
 }
