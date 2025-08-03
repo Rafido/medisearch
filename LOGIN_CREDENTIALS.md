@@ -3,32 +3,32 @@
 ## Available User Accounts
 
 ### 1. Administrator Account
-- **Username:** `admin`
-- **Password:** `MedSearch@2025`
+- **Username:** `meduseradmin`
+- **Password:** `Kx9#mZ8pQ4$vN2wR`
 - **Role:** Administrator
 - **Access Level:** Full system access, database management
 
 ### 2. Healthcare Professional Account
-- **Username:** `doctor`
-- **Password:** `Doctor#123`
+- **Username:** `meduserdoctor`
+- **Password:** `Lm7&nB5tY3@xK9sF`
 - **Role:** Healthcare Professional
 - **Access Level:** Medicine database search and reports
 
 ### 3. Pharmacist Account
-- **Username:** `pharmacist`
-- **Password:** `Pharma$456`
+- **Username:** `meduserpharmacist`
+- **Password:** `Pq4#cV6rE8!jH2mW`
 - **Role:** Pharmacist
 - **Access Level:** Medicine information and inventory access
 
 ### 4. Database Manager Account
-- **Username:** `manager`
-- **Password:** `Manager@789`
+- **Username:** `medusermanager`
+- **Password:** `Dk3$fG9nA7@uT5bX`
 - **Role:** Database Manager
 - **Access Level:** Database operations and user management
 
 ### 5. Guest User Account
-- **Username:** `guest`
-- **Password:** `Guest#2025`
+- **Username:** `meduserguest`
+- **Password:** `Zw2&hJ4vC6#pM8qL`
 - **Role:** Guest User
 - **Access Level:** Limited read-only access to medicine database
 

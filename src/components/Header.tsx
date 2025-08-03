@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, Shield, LogOut, ChevronDown, Bell, Search, Menu, X, Database, HelpCircle, FileText } from 'lucide-react';
+import { Heart, Shield, LogOut, ChevronDown, Bell, Search, Menu, X, Database, FileText, User } from 'lucide-react';
 import styles from './Header.module.css';
 
 interface User {
