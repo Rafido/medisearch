@@ -78,11 +78,11 @@ export const AUTH_STORAGE = {
 
 // Valid credentials
 export const VALID_CREDENTIALS = [
-  { username: 'admin', password: 'MedSearch@2025', role: 'Administrator' },
-  { username: 'doctor', password: 'Doctor#123', role: 'Healthcare Professional' },
-  { username: 'pharmacist', password: 'Pharma$456', role: 'Pharmacist' },
-  { username: 'manager', password: 'Manager@789', role: 'Database Manager' },
-  { username: 'guest', password: 'Guest#2025', role: 'Guest User' }
+  { username: 'meduseradmin', password: 'Kx9#mZ8pQ4$vN2wR', role: 'Administrator' },
+  { username: 'meduserdoctor', password: 'Lm7&nB5tY3@xK9sF', role: 'Healthcare Professional' },
+  { username: 'meduserpharmacist', password: 'Pq4#cV6rE8!jH2mW', role: 'Pharmacist' },
+  { username: 'medusermanager', password: 'Dk3$fG9nA7@uT5bX', role: 'Database Manager' },
+  { username: 'meduserguest', password: 'Zw2&hJ4vC6#pM8qL', role: 'Guest User' }
 ];
 
 // Validate login credentials

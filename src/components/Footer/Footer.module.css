@@ -265,6 +265,41 @@
     grid-template-columns: 1fr;
     gap: 2rem;
     padding: 2rem 1rem 1.5rem;
+    text-align: center;
+  }
+  
+  .brandSection {
+    text-align: center;
+  }
+  
+  .brandTagline {
+    text-align: center;
+  }
+  
+  .linksSection {
+    text-align: center;
+  }
+  
+  .contactSection {
+    text-align: center;
+  }
+  
+  .sectionTitle {
+    text-align: center;
+  }
+  
+  .linksList {
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .linksList li {
+    text-align: center;
+  }
+  
+  .contactInfo {
+    align-items: center;
+    justify-content: center;
   }
   
   .bottomContent {
@@ -282,20 +317,25 @@
 @media (max-width: 480px) {
   .footerMain {
     padding: 1.5rem 1rem;
+    text-align: center;
   }
   
   .footerBottom {
     padding: 1rem;
+    text-align: center;
   }
   
   .logoSection {
     flex-direction: column;
     text-align: center;
     gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
   }
   
   .logoText {
     align-items: center;
+    text-align: center;
   }
   
   .brandDescription {
@@ -304,6 +344,77 @@
   
   .contactInfo {
     align-items: center;
+    justify-content: center;
+  }
+  
+  .contactItem {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .linksList {
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .copyright {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .legalLinks {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* Extra small screens - Enhanced centering */
+@media (max-width: 360px) {
+  .brandTagline {
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  
+  .brandDescription {
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
+  .sectionTitle {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .footerLink {
+    display: block;
+    text-align: center;
+    margin: 0.25rem 0;
+  }
+  
+  .contactItem {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .copyright {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  
+  .legalLinks {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .separator {
+    display: none;
   }
 }
 

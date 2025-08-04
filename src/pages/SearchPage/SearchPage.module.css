@@ -100,15 +100,16 @@
 .heroTitle {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  color: #1a365d; /* Deep navy blue - professional and elegant */
   margin-bottom: 1.5rem;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   position: relative;
+  text-align: center;
+  /* text-shadow: 0 2px 4px rgba(26, 54, 93, 0.1);  */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .heroTitle::after {
@@ -118,20 +119,25 @@
   left: 50%;
   transform: translateX(-50%);
   width: 80px;
-  height: 4px;
-  background: var(--gradient-primary);
+  height: 3px;
+  background: #2d5a87; /* Sophisticated blue accent */
   border-radius: 2px;
 }
 
 .heroSubtitle {
   font-family: var(--font-body);
   font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-  color: var(--neutral-600);
+  color: #4a5568; /* Sophisticated dark gray - professional and readable */
   margin-bottom: 2rem;
   line-height: 1.6;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  font-weight: 400;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  opacity: 0.9;
 }
 
 .heroFeatures {
@@ -197,17 +203,23 @@
   font-family: var(--font-heading);
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--neutral-800);
+  color: #2d3748; /* Professional dark gray */
   margin-bottom: 0.75rem;
   text-align: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 0 1px 2px rgba(45, 55, 72, 0.1);
 }
 
 .searchDescription {
   font-family: var(--font-body);
-  color: var(--neutral-600);
+  color: #4a5568; /* Matching subtitle color for consistency */
   text-align: center;
   margin-bottom: 2rem;
   font-size: 1.0625rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  opacity: 0.9;
 }
 
 .searchInputWrapper {
@@ -315,7 +327,7 @@
   flex-shrink: 0;
   z-index: 15;
   height: 36px;
-  min-width: 90px;
+  min-width: 90px; /* This will be overridden by mobile styles */
   order: 2; /* Ensure search button comes after clear button */
 }
 
@@ -874,6 +886,11 @@ margin-right: 8px;
     grid-template-columns: 1fr;
   }
   
+  /* Hide keyboard shortcuts on tablets since they're touch devices */
+  .keyboardShortcutsIcon {
+    display: none;
+  }
+  
   .resultsGrid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
@@ -897,6 +914,25 @@ margin-right: 8px;
   .heroSubtitle {
     font-size: 1rem;
     margin-bottom: 1.5rem;
+  }
+
+  /* Show collapse toggle on mobile */
+  .headerCollapseToggle {
+    display: flex !important;
+  }
+
+  /* Mobile collapsed header optimization */
+  .searchHeader.collapsed {
+    min-height: 50px;
+    padding: 0.5rem;
+    margin-bottom: 0.375rem;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .searchHeader.collapsed .headerCollapseToggle {
+    bottom: -12px;
+    width: 24px;
+    height: 24px;
   }
   
   .heroFeatures {
@@ -931,37 +967,50 @@ margin-right: 8px;
   }
   
   .searchInput {
-    padding: 1rem 120px 1rem 3rem;
+    padding: 1rem 80px 1rem 2.5rem !important; /* Reduced left padding */
     font-size: 16px; /* Prevent zoom on iOS */
   }
 
+  /* Adjust placeholder size for mobile */
+  .searchInput::placeholder {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
   .searchButtonsContainer {
-    max-width: 110px;
-    width: 110px;
-    gap: 6px;
+    max-width: 75px; /* Increased to accommodate larger buttons */
+    width: 75px;     /* Increased to accommodate larger buttons */
+    gap: 4px;        /* Reduced gap */
     right: 8px;
   }  .searchButton,
   .clearButton {
-    height: 40px;
-    font-size: 0.8rem;
-    min-width: 40px;
-    padding: 0 0.5rem;
+    height: 32px;     /* Reduced from 40px */
+    font-size: 0.75rem; /* Smaller font */
+    min-width: 32px !important; /* Override with !important */
+    padding: 0 0.25rem !important; /* Override with !important */
+    width: 32px !important; /* Add width with !important */
   }
 
   .searchButton {
-    min-width: 32px;
-    width: 32px;
-    padding: 0 0.25rem;
+    min-width: 36px !important; /* Larger for icon visibility */
+    width: 36px !important;     /* Larger for icon visibility */
+    padding: 0 !important;      /* Remove padding with !important */
     order: 2; /* Search button comes after clear button */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .clearButton {
-    width: 32px;
+    width: 32px !important;      /* Larger for better visibility */
     height: 32px;
-    min-width: 32px;
-    padding: 0;
-    margin-right: 0 !important; /* Remove the large margin on mobile */
+    min-width: 32px !important; /* Larger for better visibility */
+    padding: 0 !important;      /* Override with !important */
+    margin-right: 0 !important;
     order: 1; /* Clear button comes first */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   /* Hide button text on mobile to save space */
@@ -970,25 +1019,49 @@ margin-right: 8px;
     display: none;
   }
 
+  /* Ensure icons are properly sized for mobile buttons */
+  .searchButton svg,
+  .clearButton svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0;
+  }
+
   /* Hide keyboard shortcuts on mobile since they're not relevant for touch devices */
   .keyboardShortcutsIcon {
     display: none;
-  }/* Mobile suggestions */
+    visibility: hidden;
+  }
+
+  /* Mobile suggestions - Reduced for better mobile UX */
   .suggestionsDropdown {
-    max-height: 250px;
-    font-size: 0.9rem;
+    max-height: 200px !important; /* Reduced from 250px */
+    font-size: 0.85rem;
+    border-radius: 12px; /* Slightly smaller border radius */
   }
   
   .suggestionItem {
-    padding: 0.875rem 1rem;
+    padding: 0.75rem 0.875rem !important; /* Reduced padding */
+    gap: 0.75rem; /* Reduced gap between icon and content */
   }
   
   .suggestionName {
-    font-size: 0.9rem;
+    font-size: 0.85rem !important; /* Reduced from 0.9rem */
+    margin-bottom: 0.125rem; /* Reduced margin */
   }
   
   .suggestionGeneric {
-    font-size: 0.8rem;
+    font-size: 0.75rem !important; /* Reduced from 0.8rem */
+  }
+
+  .suggestionIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .medicineCount {
+    font-size: 0.65rem !important; /* Smaller count badge */
+    padding: 0.0625rem 0.25rem; /* Reduced padding */
   }
   
   /* Mobile filters */
@@ -1102,8 +1175,14 @@ margin-right: 8px;
   }
   
   .searchInput {
-    padding: 0.875rem 90px 0.875rem 2.5rem;
+    padding: 0.875rem 90px 0.875rem 2rem; /* Reduced left padding */
     font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Smaller placeholder for compact screens */
+  .searchInput::placeholder {
+    font-size: 0.85rem;
+    font-weight: 400;
   }
   
   .searchButtonsContainer {
@@ -1137,6 +1216,14 @@ margin-right: 8px;
   .searchButtonText,
   .clearButtonText {
     display: none;
+  }
+
+  /* Ensure icons are properly sized for small mobile buttons */
+  .searchButton svg,
+  .clearButton svg {
+    width: 14px !important;
+    height: 14px !important;
+    flex-shrink: 0;
   }
 
   /* Hide keyboard shortcuts on small mobile */
@@ -1173,33 +1260,561 @@ margin-right: 8px;
   }
   
   .searchInput {
-    padding: 1rem 150px 1rem 2.5rem;
+    padding: 1rem 70px 1rem 2rem !important; /* Reduced left padding */
     font-size: 0.95rem;
+  }
+
+  /* Smaller placeholder for mobile screens */
+  .searchInput::placeholder {
+    font-size: 0.8rem;
+    font-weight: 400;
+  }
+
+  /* Ultra-compact collapsed header for small mobile */
+  .searchHeader.collapsed {
+    min-height: 40px;
+    padding: 0.375rem;
+    margin-bottom: 0.25rem;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .searchHeader.collapsed .headerCollapseToggle {
+    bottom: -10px;
+    width: 20px;
+    height: 20px;
   }
   
   .searchButtonsContainer {
-    max-width: 130px;
-    gap: 3px;
+    max-width: 65px !important; /* Increased to fit larger buttons */
+    width: 65px !important;
+    gap: 2px;        /* Minimal gap */
+    right: 6px;
   }
   
   .searchButton,
   .clearButton {
-    height: 32px;
+    height: 34px !important;    /* Larger for icon visibility */  
     font-size: 0.75rem;
-    min-width: 60px;
+    min-width: 30px !important; /* Larger minimum width */
+    padding: 0 !important;      /* No padding with !important */
+    width: 30px !important;     /* Larger fixed width */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
+  .searchButton {
+    width: 30px !important;
+    min-width: 30px !important;
+  }
+  
+  .clearButton {
+    width: 28px !important;
+    min-width: 28px !important;
+  }
+  
+  /* Ultra-compact mobile header */
+  .resultsHeader {
+    padding: 0.5rem;
+    gap: 0.375rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+  }
+
+  .resultsTitle {
+    font-size: 0.8rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .resultsCount {
+    font-size: 0.7rem;
+    padding: 0.125rem 0.25rem;
+    border-radius: 3px;
+  }
+
+  /* Inline filters and view selector */
+  .filtersAndViewContainer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.375rem;
+  }
+
+  /* Super compact filters */
+  .advancedFiltersSection {
+    margin: 0.375rem 0;
+    border-radius: 6px;
+  }
+
+  .advancedFiltersToggle {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+    gap: 0.375rem;
+  }
+
+  .filtersGrid {
+    padding: 0.625rem;
+    gap: 0.625rem;
+  }
+
+  .filterGroup {
+    gap: 0.375rem;
+  }
+
+  .filterGroupTitle {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .filterCheckbox {
+    padding: 0.375rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+  }
+
   .medicineCard {
-    padding: 1.5rem;
+    padding: 0.875rem;
+    border-radius: 10px;
+    margin-bottom: 0.375rem;
   }
   
   .cardHeader {
     flex-direction: column;
-    text-align: center;
+    text-align: left;
+    gap: 0.375rem;
+    margin-bottom: 0.5rem;
   }
   
+  .medicineName {
+    font-size: 0.9rem;
+    margin-bottom: 0.125rem;
+    line-height: 1.2;
+  }
+
+  .drugCode {
+    font-size: 0.7rem;
+    align-self: flex-start;
+    margin-top: 0.125rem;
+    padding: 0.0625rem 0.25rem;
+  }
+
+  /* Mobile-first card actions */
   .cardActions {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    justify-content: stretch;
+    margin-top: 0.5rem;
+  }
+
+  .cardActions button {
+    flex: 1;
+    min-width: 0;
+    min-height: 36px;
+    padding: 0.5rem 0.375rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  /* Single column grid for small mobile */
+  .gridView .medicineGrid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+  }
+
+  .listView .medicineList {
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+  }
+}
+
+/* Large mobile screens (481px to 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  /* Two column grid for larger mobile screens */
+  .gridView .medicineGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+    padding: 0 0.75rem;
+  }
+
+  .medicineCard {
+    padding: 1.125rem;
+  }
+
+  .medicineName {
+    font-size: 1.05rem;
+  }
+
+  .cardActions button {
+    min-height: 44px;
+    padding: 0.75rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+  
+  /* Enhanced Advanced Filters for small mobile */
+  .advancedFiltersSection {
+    margin: 0.75rem 0;
+    border-radius: 6px;
+  }
+  
+  .advancedFiltersToggle {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .filtersGrid {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+  
+  .filterCheckbox {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .filterActions {
+    margin-top: 0.75rem;
+  }
+
+  /* Compact suggestions for small mobile */
+  .suggestionsDropdown {
+    max-height: 180px !important; /* Even more compact */
+    border-radius: 10px;
+  }
+  
+  .suggestionItem {
+    padding: 0.625rem 0.75rem !important; /* More compact padding */
+    gap: 0.5rem !important; /* Smaller gap */
+  }
+  
+  .suggestionName {
+    font-size: 0.8rem !important; /* Smaller text */
+    margin-bottom: 0.0625rem; /* Minimal margin */
+  }
+  
+  .suggestionGeneric {
+    font-size: 0.7rem !important; /* Smaller generic text */
+  }
+
+  .suggestionIcon {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .medicineCount {
+    font-size: 0.6rem !important; /* Very small count */
+    padding: 0.0625rem 0.1875rem; /* Minimal padding */
+  }
+
+/* Extra small screens - Force override any !important rules */
+@media (max-width: 360px) {
+  .searchInput {
+    padding: 0.875rem 65px 0.875rem 1.5rem !important; /* Reduced left padding further */
+    font-size: 0.9rem;
+  }
+
+  /* Extra small placeholder for tiny screens */
+  .searchInput::placeholder {
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  
+  .searchButtonsContainer {
+    max-width: 60px !important; /* Increased to fit larger buttons */
+    width: 60px !important;
+    gap: 1px;
+    right: 4px;
+  }
+  
+  .searchButton {
+    width: 28px !important;     /* Larger for icon visibility */
+    height: 32px !important;    /* Taller for better touch target */
+    min-width: 28px !important;
+    padding: 0 !important;
+    font-size: 0.7rem;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .clearButton {
+    width: 26px !important;     /* Larger for icon visibility */
+    height: 30px !important;
+    min-width: 26px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Ensure icons are properly sized for extra small buttons */
+  .searchButton svg,
+  .clearButton svg {
+    width: 12px !important;
+    height: 12px !important;
+    flex-shrink: 0;
+  }
+  
+  /* Hide keyboard shortcuts on extra small screens */
+  .keyboardShortcutsIcon {
+    display: none !important;
+  }
+  
+  /* Enhanced Advanced Filters for extra small screens */
+  .advancedFiltersSection {
+    margin: 0.5rem 0;
+    border-radius: 6px;
+  }
+  
+  .advancedFiltersToggle {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    gap: 0.375rem;
+  }
+  
+  .filtersGrid {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+  
+  .filterGroup {
+    gap: 0.375rem;
+  }
+  
+  .filterGroupTitle {
+    font-size: 0.8rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .filterCheckbox {
+    padding: 0.5rem 0.375rem;
+    gap: 0.375rem;
+  }
+  
+  .filterCheckbox input[type="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  .checkboxLabel {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .filterActions {
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  
+  .resetFiltersButton,
+  .selectAllButton {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    min-height: 40px;
+  }
+  
+  .filterExamples {
+    margin-top: 0.75rem;
+  }
+  
+  .examplesTitle {
+    font-size: 0.75rem;
+  }
+  
+  .example {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+
+  /* Ultra-compact suggestions for extra small screens */
+  .suggestionsDropdown {
+    max-height: 160px !important; /* Very compact for tiny screens */
+    border-radius: 8px;
+  }
+  
+  .suggestionItem {
+    padding: 0.5rem 0.625rem !important; /* Minimal padding */
+    gap: 0.375rem !important; /* Very small gap */
+  }
+  
+  .suggestionName {
+    font-size: 0.75rem !important; /* Smaller text for tiny screens */
+    margin-bottom: 0.0625rem;
+  }
+  
+  .suggestionGeneric {
+    font-size: 0.65rem !important; /* Very small generic text */
+  }
+
+  .suggestionIcon {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .medicineCount {
+    font-size: 0.55rem !important; /* Extremely small count */
+    padding: 0.0625rem 0.125rem; /* Minimal padding */
+  }
+
+  /* Ultra-compact medicine cards for tiny screens */
+  .resultsHeader {
+    padding: 0.375rem;
+    gap: 0.25rem;
+    margin-bottom: 0.375rem;
+    border-radius: 6px;
+  }
+
+  .resultsTitle {
+    font-size: 0.75rem;
+    margin-bottom: 0.0625rem;
+  }
+
+  .resultsCount {
+    font-size: 0.65rem;
+    padding: 0.0625rem 0.1875rem;
+    border-radius: 2px;
+  }
+
+  /* Minimal filters */
+  .advancedFiltersSection {
+    margin: 0.25rem 0;
+    border-radius: 4px;
+  }
+
+  .advancedFiltersToggle {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.7rem;
+    gap: 0.25rem;
+  }
+
+  .filtersGrid {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .filterGroupTitle {
+    font-size: 0.7rem;
+    margin-bottom: 0.1875rem;
+  }
+
+  .filterCheckbox {
+    padding: 0.25rem;
+    font-size: 0.7rem;
+    border-radius: 3px;
+  }
+
+  .gridView .medicineGrid,
+  .listView .medicineList {
+    gap: 0.375rem;
+    padding: 0 0.5rem;
+  }
+
+  .medicineCard {
+    padding: 0.625rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .cardHeader {
+    gap: 0.25rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .medicineName {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    margin-bottom: 0.0625rem;
+  }
+
+  .drugCode {
+    font-size: 0.65rem;
+    padding: 0.0625rem 0.1875rem;
+  }
+
+  .cardActions {
+    gap: 0.25rem;
+    margin-top: 0.375rem;
+  }
+
+  .cardActions button {
+    min-height: 32px;
+    padding: 0.375rem 0.25rem;
+    font-size: 0.7rem;
+    border-radius: 4px;
+  }
+
+  /* Ultra-minimal collapsed header for extra small screens */
+  .headerCollapseToggle {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    padding: 0 !important;
+    font-size: 0.5rem !important;
+    border-radius: 3px !important;
+    background: rgba(56, 189, 248, 0.9) !important;
+    border: 1px solid rgba(14, 165, 233, 0.6) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .headerCollapseToggle svg {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .heroTitle.collapsed {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.25rem !important;
+    line-height: 1.1 !important;
+    font-weight: 700 !important;
+  }
+
+  .searchHeader.collapsed {
+    min-height: 32px !important;
+    padding: 0.25rem 0.5rem !important;
+    margin-bottom: 0.25rem !important;
+    border-radius: 4px !important;
+  }
+
+  .searchHeader.collapsed .heroContent {
+    max-width: none !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.25rem !important;
+  }
+
+  .searchHeader.collapsed .searchForm {
+    display: none !important;
+  }
+
+  .searchHeader.collapsed .advancedFiltersSection {
+    display: none !important;
+  }
+
+  /* Ultra-minimal collapsed searchResultsHeader for extra small screens */
+  .headerCollapseToggle {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .searchResultsHeader.collapsed {
+    min-height: 35px !important;
+    padding: 0.25rem 0.5rem !important;
+  }
+
+  .searchResultsHeader.collapsed .headerCollapseToggle {
+    width: 18px !important;
+    height: 18px !important;
+    right: 0.5rem !important;
+  }
+
+  .searchResultsHeader.collapsed .headerCollapseToggle svg {
+    width: 10px !important;
+    height: 10px !important;
   }
 }
 
@@ -1250,7 +1865,7 @@ margin-right: 8px;
   color: #0f4c75;
   margin-bottom: 1.5rem;
   line-height: 1.1;
-  text-shadow: 0 2px 8px rgba(15, 76, 117, 0.3);
+  /* text-shadow: 0 2px 8px rgba(15, 76, 117, 0.3); */
 }
 
 .highlight {
@@ -1762,6 +2377,67 @@ margin-right: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transform-origin: top center;
   will-change: transform, padding, margin-bottom;
+}
+
+/* Mobile Header Collapse Toggle Button */
+.headerCollapseToggle {
+  display: none; /* Hidden by default, shown on mobile */
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  -webkit-tap-highlight-color: rgba(37, 99, 235, 0.2);
+}
+
+.headerCollapseToggle:hover {
+  background: var(--primary-blue-hover);
+  transform: translateX(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.headerCollapseToggle:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+/* Collapsed Header State */
+.searchHeader.collapsed {
+  min-height: 60px;
+  padding: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0 0 12px 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.searchHeader.collapsed .heroTitle,
+.searchHeader.collapsed .headerSubtitle,
+.searchHeader.collapsed .searchForm {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+/* Collapsed State Toggle Button */
+.searchHeader.collapsed .headerCollapseToggle {
+  bottom: -15px;
+  width: 30px;
+  height: 30px;
 }
 
 .searchHeader::before {
@@ -3401,6 +4077,14 @@ h1 {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  /* Touch-friendly enhancements */
+  -webkit-tap-highlight-color: rgba(37, 99, 235, 0.1);
+  touch-action: manipulation;
+  user-select: none;
+  /* Drag and smooth interactions */
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 .medicineCard::before {
@@ -3425,6 +4109,47 @@ h1 {
 
 .medicineCard:hover::before {
   opacity: 1;
+}
+
+.medicineCard:active {
+  transform: translateY(-2px) scale(0.98);
+  transition: all 0.1s ease;
+  box-shadow: 
+    0 8px 24px rgba(15, 76, 117, 0.12),
+    0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.medicineCard:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.medicineCard:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Touch and drag interaction states */
+.medicineCard.dragging {
+  transform: rotate(2deg) scale(1.02);
+  opacity: 0.9;
+  z-index: 100;
+  box-shadow: 
+    0 16px 48px rgba(15, 76, 117, 0.2),
+    0 8px 24px rgba(59, 130, 246, 0.15);
+}
+
+.medicineCard.swiping {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.medicineCard.swipe-left {
+  transform: translateX(-50px) rotate(-3deg);
+  opacity: 0.7;
+}
+
+.medicineCard.swipe-right {
+  transform: translateX(50px) rotate(3deg);
+  opacity: 0.7;
 }
 
 .medicineCard.selected {
@@ -3927,7 +4652,7 @@ h1 {
   
   .clearButton {
     position: relative;
-    left: -139px;
+    left: -39px;
     top: 17px;
     height: 32px;
     min-width: 60px;
@@ -4430,7 +5155,7 @@ h1 {
   z-index: 1 !important;
   flex: 1 !important;
   box-sizing: border-box !important;
-  padding: 1.25rem 250px 1.25rem 1.3rem !important;
+  padding: 1.25rem 250px 1.25rem 1.3rem;
   font-size: 1.0625rem !important;
   border: none !important;
   border-radius: 0 !important;
@@ -4474,7 +5199,7 @@ h1 {
   cursor: pointer !important;
   transition: all 0.3s ease !important;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
-  min-width: 180px !important;
+  min-width: 180px;
   justify-content: center !important;
 }
 
@@ -5021,6 +5746,12 @@ h1 {
 .medicineContainer {
   margin-top: 1.5rem;
   transition: all var(--transition-smooth);
+  /* Mobile scroll optimization */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* Touch and drag optimizations */
+  overscroll-behavior: contain;
+  scroll-snap-type: y proximity;
 }
 
 /* Grid View Styles - More compact for maximum items */
@@ -5029,6 +5760,21 @@ h1 {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 0.75rem;
   padding: 0;
+  /* Mobile performance optimization */
+  will-change: transform;
+  transform: translateZ(0);
+  /* Touch interaction enhancements */
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+/* Individual cards with scroll snap */
+.gridView .medicineCard {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  /* Enhanced mobile performance */
+  contain: layout style paint;
+  isolation: isolate;
 }
 
 /* List View Styles - Compact */
@@ -5037,6 +5783,24 @@ h1 {
   flex-direction: column;
   gap: 0.75rem;
   padding: 0;
+  /* Mobile scroll optimization */
+  will-change: transform;
+  transform: translateZ(0);
+  /* Touch interaction enhancements */
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: y proximity;
+  /* Smooth momentum scrolling */
+  overscroll-behavior: contain;
+  scroll-padding: 1rem;
+}
+
+/* Individual list items with scroll snap */
+.listView .medicineCard {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  /* Enhanced mobile performance */
+  contain: layout style paint;
+  isolation: isolate;
 }
 
 /* Responsive Design for Dual Views */
@@ -5044,12 +5808,24 @@ h1 {
   .resultsHeader {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
-    padding: 1.25rem 1.5rem;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem; /* Reduced padding */
+    margin-bottom: 1rem; /* Reduced margin */
+    border-radius: 12px; /* Smaller border radius */
   }
   
   .resultsInfo {
     text-align: center;
+  }
+
+  .resultsTitle {
+    font-size: 0.9rem; /* Smaller title */
+    margin-bottom: 0.25rem;
+  }
+
+  .resultsCount {
+    font-size: 0.8rem; /* Smaller count */
+    padding: 0.25rem 0.5rem;
   }
   
   .viewModeContainer {
@@ -5057,28 +5833,123 @@ h1 {
     justify-content: center;
   }
   
+  /* Enhanced mobile grid - touch-friendly */
   .gridView .medicineGrid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  /* Enhanced mobile list view */
+  .listView .medicineList {
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  /* Touch-optimized medicine cards */
+  .medicineCard {
+    padding: 1.5rem;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(37, 99, 235, 0.1);
+    touch-action: manipulation;
+  }
+
+  .medicineCard:hover {
+    transform: translateY(-4px);
+  }
+
+  .medicineCard:active {
+    transform: translateY(-2px) scale(0.98);
+    transition: all 0.1s ease;
   }
 }
 
 @media (max-width: 768px) {
+  /* Ultra-compact header for mobile */
   .resultsHeader {
-    padding: 1rem;
+    padding: 0.75rem;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    border-radius: 10px;
   }
   
   .resultsTitle {
-    font-size: 1rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .resultsCount {
+    font-size: 0.75rem;
+    padding: 0.1875rem 0.375rem;
+    border-radius: 4px;
+  }
+
+  /* Compact filters and view mode in one line */
+  .filtersAndViewContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  /* Compact advanced filters */
+  .advancedFiltersSection {
+    margin: 0.5rem 0;
+    border-radius: 8px;
+  }
+
+  .advancedFiltersToggle {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .filtersGrid {
+    padding: 0.875rem;
+    gap: 0.875rem;
   }
   
+  /* Tablet-optimized grid */
   .gridView .medicineGrid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    padding: 0 0.75rem;
   }
   
   .listView .medicineList {
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+  }
+
+  /* Compact medicine cards for tablets */
+  .medicineCard {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .cardHeader {
+    margin-bottom: 0.625rem;
+    gap: 0.625rem;
+  }
+
+  .medicineName {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  /* Touch-friendly action buttons */
+  .cardActions {
     gap: 0.5rem;
+    margin-top: 0.875rem;
+  }
+
+  .cardActions button {
+    min-height: 40px;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
   }
 }
 
@@ -5124,6 +5995,49 @@ h1 {
   gap: 0.75rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   z-index: 10;
+}
+
+/* Collapsed state for mobile */
+.searchResultsHeader.collapsed {
+  padding: 0.5rem 1rem;
+  gap: 0;
+  min-height: 60px;
+}
+
+.searchResultsHeader.collapsed .headerCollapseToggle {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 11;
+}
+
+.searchResultsHeader.collapsed .headerCollapseToggle:hover {
+  background: rgba(59, 130, 246, 0.2);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.headerCollapseToggle {
+  display: none; /* Hidden by default on desktop */
+  pointer-events: none; /* Disable interactions on desktop */
+}
+
+/* Only enable on mobile screens */
+@media (max-width: 768px) {
+  .headerCollapseToggle {
+    pointer-events: auto; /* Enable interactions on mobile */
+  }
 }
 
 /* Main header row with title and controls */
@@ -5473,6 +6387,42 @@ h1 {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
+    position: relative;
+  }
+
+  /* Show collapse toggle on mobile */
+  .headerCollapseToggle {
+    display: flex !important;
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 11;
+  }
+
+  .headerCollapseToggle:hover {
+    background: rgba(59, 130, 246, 0.2);
+    transform: scale(1.05);
+  }
+
+  .searchResultsHeader.collapsed {
+    padding: 0.5rem 1rem;
+    min-height: 50px;
+    gap: 0;
+  }
+
+  .searchResultsHeader.collapsed .headerCollapseToggle {
+    top: 50%;
+    transform: translateY(-50%);
   }
   
   .headerLeft {
@@ -5514,6 +6464,23 @@ h1 {
     width: 32px;
     height: 32px;
   }
+
+  /* Smaller collapsed header for small screens */
+  .headerCollapseToggle {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .searchResultsHeader.collapsed {
+    min-height: 40px !important;
+    padding: 0.375rem 0.75rem !important;
+  }
+
+  .searchResultsHeader.collapsed .headerCollapseToggle {
+    width: 24px !important;
+    height: 24px !important;
+    right: 0.75rem !important;
+  }
   
   .searchResultsContent .medicineContainer.gridView .medicineGrid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -5522,28 +6489,118 @@ h1 {
 
   /* Advanced Filters Mobile Alignment */
   .advancedFiltersSection {
-    margin-left: 0;
-    margin-right: 0;
+    margin: 1rem 0 0 0; /* Remove left/right margins */
+    border-radius: 8px; /* Smaller border radius for mobile */
+    width: 100%;
+    max-width: 100%;
   }
 
   .advancedFiltersToggle {
     text-align: left;
     justify-content: flex-start;
     padding: 0.875rem 1rem;
+    font-size: 0.9rem; /* Slightly smaller font */
+    gap: 0.5rem;       /* Reduce gap */
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .filtersGrid {
     padding: 1rem;
     text-align: left;
+    gap: 1rem;         /* Reduce gap between sections */
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .filterGroup {
     text-align: left;
+    gap: 0.5rem;       /* Reduce gap between checkboxes */
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .filterGroupTitle {
     text-align: left;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem; /* Reduce bottom margin */
+    font-size: 0.85rem;    /* Smaller font on mobile */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .filterCheckbox {
+    padding: 0.5rem;           /* Adequate padding for touch */
+    gap: 0.5rem;               /* Good gap for touch targets */
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .filterCheckbox input[type="checkbox"] {
+    width: 18px !important;    /* Larger for mobile touch */
+    height: 18px !important;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  .checkboxLabel {
+    font-size: 0.9rem;         /* Readable size for mobile */
+    line-height: 1.4;
+    flex: 1;
+    white-space: normal;       /* Allow text wrapping */
+    word-wrap: break-word;
+  }
+
+  .filterActions {
+    flex-direction: column;    /* Stack buttons vertically on mobile */
+    gap: 0.75rem;
+    margin-top: 1rem;
+    width: 100%;
+    align-items: stretch;      /* Make buttons full width */
+  }
+
+  .resetFiltersButton,
+  .selectAllButton {
+    width: 100%;          /* Full width buttons on mobile */
+    padding: 0.875rem;    /* Increase touch target */
+    font-size: 0.9rem;    /* Appropriate font size */
+    box-sizing: border-box;
+    min-height: 44px;     /* Minimum touch target size */
+  }
+
+  .filterExamples {
+    margin-top: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .examplesTitle {
+    font-size: 0.85rem;    /* Smaller title */
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+
+  .examplesList {
+    gap: 0.5rem;           /* Good gap for mobile */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+  }
+
+  .example {
+    font-size: 0.85rem;    /* Readable example text */
+    padding: 0.25rem 0;    /* Add some vertical padding */
+    line-height: 1.4;
+    word-wrap: break-word;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .filterCheckbox {
@@ -6073,6 +7130,7 @@ h1 {
     flex-direction: row;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
   }
 
   .filterIcon {

@@ -12,7 +12,6 @@ import {
   FileText, 
   ChevronDown, 
   ChevronUp,
-  Sparkles,
   Target,
   Zap,
   Eye,
@@ -46,11 +45,12 @@ const SearchPage = () => {
   const [suggestions, setSuggestions] = useState<SuggestionMedicine[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [selectedDosageForm, setSelectedDosageForm] = useState<string>('all');
   const [selectedDistributor, setSelectedDistributor] = useState<string>('all');
   const [unfilteredMedicines, setUnfilteredMedicines] = useState<Medicine[]>([]);
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
+  const [headerCollapsed, setHeaderCollapsed] = useState<boolean>(true); // Start collapsed on mobile
   
   // Advanced search filter states
   const [searchFilters, setSearchFilters] = useState({
@@ -135,6 +135,21 @@ const SearchPage = () => {
       console.log('Medicines loaded successfully:', medicines.length);
     }
   }, [medicines]);
+
+  // Handle window resize to ensure header is expanded on desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setHeaderCollapsed(false); // Always expand on desktop
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Utility function to extract country from manufacturer name
   const extractCountryFromManufacturer = (manufacturer: string): string => {
@@ -523,10 +538,26 @@ const SearchPage = () => {
       {/* Full-screen search results overlay */}
       {searchTriggered && (
         <div className={styles.searchResultsOverlay}>
-          {/* Fixed header with close and view controls */}
-          <div className={styles.searchResultsHeader}>
-            {/* Main header row with title and controls */}
-            <div className={styles.headerMainRow}>
+          {/* Fixed header with close and view controls - Collapsible on mobile */}
+          <div className={`${styles.searchResultsHeader} ${headerCollapsed ? styles.collapsed : ''}`}>
+            {/* Collapse/Expand Toggle Button - Mobile Only */}
+            <button
+              className={styles.headerCollapseToggle}
+              onClick={() => {
+                // Only allow toggle on mobile screens (768px and below)
+                if (window.innerWidth <= 768) {
+                  setHeaderCollapsed(!headerCollapsed);
+                }
+              }}
+              aria-label={headerCollapsed ? 'Expand header' : 'Collapse header'}
+            >
+              {headerCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+            </button>
+
+            {/* Main header row with title and controls - Hidden when collapsed */}
+            {!headerCollapsed && (
+              <>
+                <div className={styles.headerMainRow}>
               <div className={styles.headerLeft}>
                 <button
                   className={styles.closeButton}
@@ -686,6 +717,8 @@ const SearchPage = () => {
                 </div>
               </div>
             )}
+              </>
+            )}
           </div>
 
           {/* Search results content */}
@@ -735,7 +768,6 @@ const SearchPage = () => {
         {/* Hero Section */}
         <section className={styles.heroSection}>
           <h1 className={styles.heroTitle}>
-            <Sparkles size={48} className={styles.heroIcon} />
             UAE Medicine Search
           </h1>
           <p className={styles.heroSubtitle}>
