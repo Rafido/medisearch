@@ -8,13 +8,11 @@ import {
   Search, 
   Pill, 
   Shield, 
-  Clock, 
   FileText, 
   ChevronDown, 
   ChevronUp,
   Target,
   Zap,
-  Eye,
   AlertCircle,
   CheckCircle,
   RefreshCw,
@@ -53,14 +51,13 @@ const SearchPage = () => {
   const [headerCollapsed, setHeaderCollapsed] = useState<boolean>(true); // Start collapsed on mobile
   
   // Advanced search filter states
-  const [searchFilters, setSearchFilters] = useState({
+  const [searchFilters] = useState({
     searchByName: true,
     searchByDistributor: false,
     searchByManufacturer: false,
     searchByCountry: false,
     searchByGeneric: true
   });
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   
   const searchTimeout = useRef<number | undefined>(undefined);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -768,11 +765,10 @@ const SearchPage = () => {
         {/* Hero Section */}
         <section className={styles.heroSection}>
           <h1 className={styles.heroTitle}>
-            UAE Medicine Search
+            MedSearch Medicine Database
           </h1>
           <p className={styles.heroSubtitle}>
-            Discover comprehensive pharmaceutical information with our advanced search system. 
-            Find medicines, check availability, and access detailed drug information instantly.
+            Search UPP-covered medications and maximize pharmacy revenue with compliant dispensing.
           </p>
           
           <div className={styles.heroFeatures}>
@@ -826,7 +822,7 @@ const SearchPage = () => {
                       setShowSuggestions(true);
                     }
                   }}
-                  placeholder="Search medicines... (e.g., Paracetamol)"
+                  placeholder="Search medicines..."
                   className={styles.searchInput}
                   autoComplete="off"
                 />
@@ -903,7 +899,7 @@ const SearchPage = () => {
             </form>
 
             {/* Advanced Search Filters */}
-            <div className={styles.advancedFiltersSection}>
+            {/* <div className={styles.advancedFiltersSection}>
               <button 
                 type="button"
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
@@ -1011,7 +1007,7 @@ const SearchPage = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </section>
 
@@ -1086,7 +1082,7 @@ const SearchPage = () => {
         </section>
 
         {/* Welcome Screen - Show when no search is triggered */}
-        {!searchTriggered && (
+        {/* {!searchTriggered && (
           <section className={styles.resultsSection}>
             <div className={styles.welcomeScreen}>
               <div className={styles.welcomeContent}>
@@ -1125,7 +1121,7 @@ const SearchPage = () => {
               </div>
             </div>
           </section>
-        )}
+        )} */}
       </div>
 
       {/* Keyboard Shortcuts Tooltip Icon - Hidden on mobile since touch devices don't use keyboard shortcuts */}

@@ -3,8 +3,8 @@
 
 :root {
   /* Enhanced Color Palette */
-  --primary-blue: #2563eb;
-  --primary-blue-dark: #1d4ed8;
+  --primary-blue: #0369a1;
+  --primary-blue-dark: #075985;
   --primary-blue-light: #dbeafe;
   --accent-purple: #7c3aed;
   --accent-pink: #ec4899;
@@ -260,7 +260,7 @@
 .submitButton {
   width: 100%;
   padding: 1rem 1.5rem;
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #014fc8 0%, #c33bf8 100%) !important;
   color: white;
   border: none;
   border-radius: 12px;

@@ -88,12 +88,28 @@ export const MedicineCard: React.FC<MedicineCardProps> = ({
 
         <div className={styles.priceSection}>
           <div className={styles.priceContainer}>
-            <span className={styles.aedLabel}>AED</span>
-            <span className={styles.price}>{formatPrice(medicine.price)}</span>
+            {/* Package Markup (Shop Margin) - Left */}
+            <div className={styles.mainPriceRow}>
+              <span className={styles.aedLabel}>Package Markup</span>
+              <span className={styles.price}>
+                {(() => {
+                  const publicPrice = medicine.packagePriceToPublic || 0;
+                  const pharmacyPrice = medicine.packagePriceToPharmacy || 0;
+                  const markup = publicPrice - pharmacyPrice;
+                  return markup > 0 ? formatPrice(markup) : 'None';
+                })()}
+              </span>
+            </div>
+            
+            {/* Price to Public - Right */}
+            <div className={styles.publicPriceRow}>
+              <span className={styles.publicPriceLabel}>Public:</span>
+              <span className={styles.publicPrice}>{formatPrice(medicine.packagePriceToPublic || medicine.price || 0)}</span>
+            </div>
           </div>
-          {medicine.inStock && (
+          {/* {medicine.inStock && (
             <span className={styles.inStock}>In Stock</span>
-          )}
+          )} */}
         </div>
       </div>
     </div>

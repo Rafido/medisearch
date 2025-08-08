@@ -73,7 +73,7 @@ margin-right: 8px;
 .searchButton {
   width: 56px;
   border: none;
-  background: #646cff;
+  background: linear-gradient(135deg, #014fc8 0%, #c33bf8 100%) !important;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;

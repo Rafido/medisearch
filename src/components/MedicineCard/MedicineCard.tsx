@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, DollarSign } from 'lucide-react';
+import { Package } from 'lucide-react';
 import type { Medicine } from '../../utils/csvParser';
 import styles from './MedicineCard.module.css';
 
@@ -90,10 +90,28 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
         )}
 
         <div className={styles.priceSection}>
-          <span className={styles.price}>
-            <DollarSign size={14} className={styles.priceIcon} />
-            AED {medicine.price.toFixed(2)}
-          </span>
+          <div className={styles.priceContainer}>
+            {/* Package Markup (Shop Margin) - Left Bottom */}
+            <div className={styles.markupPrice}>
+              <span className={styles.markupLabel}>Package Markup:</span>
+              <span className={styles.markupValue}>
+                {(() => {
+                  const publicPrice = medicine.packagePriceToPublic || 0;
+                  const pharmacyPrice = medicine.packagePriceToPharmacy || 0;
+                  const markup = publicPrice - pharmacyPrice;
+                  return markup > 0 ? `AED ${markup.toFixed(2)}` : 'None';
+                })()}
+              </span>
+            </div>
+            
+            {/* Price to Public - Right Bottom */}
+            <div className={styles.publicPrice}>
+              <span className={styles.publicPriceLabel}>Public:</span>
+              <span className={styles.publicPriceValue}>
+                AED {(medicine.packagePriceToPublic || medicine.price || 0).toFixed(2)}
+              </span>
+            </div>
+          </div>
           <button
             className={styles.viewDetailsBtn}
             onClick={(e) => {

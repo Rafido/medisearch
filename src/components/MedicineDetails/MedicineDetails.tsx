@@ -84,8 +84,15 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
               <h3 className={styles.sectionTitle}>Pricing Information</h3>
               
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Package Markup (Main Price)</span>
-                <span className={styles.priceValue}>AED {(medicine.packageMarkup || medicine.price || 0).toFixed(2)}</span>
+                <span className={styles.detailLabel}>Package Markup</span>
+                <span className={styles.priceValue}>
+                  {(() => {
+                    const publicPrice = medicine.packagePriceToPublic || 0;
+                    const pharmacyPrice = medicine.packagePriceToPharmacy || 0;
+                    const markup = publicPrice - pharmacyPrice;
+                    return markup > 0 ? `AED ${markup.toFixed(2)}` : 'None';
+                  })()}
+                </span>
               </div>
               
               <div className={styles.detailItem}>
@@ -137,12 +144,12 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>Status & Availability</h3>
               
-              <div className={styles.detailItem}>
+              {/* <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Stock Status</span>
                 <span className={`${styles.detailValue} ${medicine.inStock ? styles.inStock : styles.outOfStock}`}>
                   {medicine.inStock ? 'In Stock' : 'Out of Stock'}
                 </span>
-              </div>
+              </div> */}
 
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Status</span>

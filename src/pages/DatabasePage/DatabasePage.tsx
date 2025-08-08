@@ -154,7 +154,7 @@ const DatabasePage = () => {
         <div className={styles.tableWrapper}>
           <table className={styles.dataTable}>
             <thead>
-              <tr>
+              <tr className={styles.tableHeaderRow}>
                 <th className={styles.tableHeader}>
                   <div className={styles.headerContent}>
                     DOH Drug Code
@@ -351,10 +351,10 @@ const DatabasePage = () => {
                       <span className={styles.infoLabel}>Category:</span>
                       <span className={styles.infoValue}>{selectedMedicine.category || 'Prescription'}</span>
                     </div>
-                    <div className={styles.infoItem}>
+                    {/* <div className={styles.infoItem}>
                       <span className={styles.infoLabel}>In Stock:</span>
                       <span className={styles.infoValue}>{selectedMedicine.inStock ? 'Yes' : 'No'}</span>
-                    </div>
+                    </div> */}
                     <div className={styles.infoItem}>
                       <span className={styles.infoLabel}>Priority Score:</span>
                       <span className={styles.infoValue}>{selectedMedicine.priorityScore}</span>

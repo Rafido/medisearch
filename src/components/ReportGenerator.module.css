@@ -53,7 +53,7 @@
   align-items: center;
   gap: 0.5rem;
   background: rgba(37, 99, 235, 0.1);
-  color: #2563eb;
+  color: #0369a1;
   padding: 0.375rem 0.875rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -88,7 +88,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: var(--accent-color, #2563eb);
+  background: var(--accent-color, #0369a1);
   transform: scaleX(0);
   transition: transform 0.3s ease;
   transform-origin: left;
@@ -97,7 +97,7 @@
 .reportCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
-  border-color: var(--accent-color, #2563eb);
+  border-color: var(--accent-color, #0369a1);
 }
 
 .reportCard:hover::before {
@@ -105,7 +105,7 @@
 }
 
 .reportCard.selected {
-  border-color: var(--accent-color, #2563eb);
+  border-color: var(--accent-color, #0369a1);
   background: rgba(255, 255, 255, 1);
   box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
 }
@@ -124,7 +124,7 @@
 .reportIcon {
   width: 36px;
   height: 36px;
-  background: var(--accent-color, #2563eb);
+  background: var(--accent-color, #0369a1);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -136,7 +136,7 @@
 .reportCount {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--accent-color, #2563eb);
+  color: var(--accent-color, #0369a1);
   background: rgba(37, 99, 235, 0.1);
   padding: 0.2rem 0.4rem;
   border-radius: 10px;
@@ -171,7 +171,7 @@
 .selectedDot {
   width: 10px;
   height: 10px;
-  background: var(--accent-color, #2563eb);
+  background: var(--accent-color, #0369a1);
   border-radius: 50%;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
@@ -210,12 +210,12 @@
 }
 
 .filterSelect:hover {
-  border-color: #2563eb;
+  border-color: #0369a1;
 }
 
 .filterSelect:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #0369a1;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
@@ -243,7 +243,7 @@
 
 .advancedToggle:hover {
   background: rgba(255, 255, 255, 0.8);
-  border-color: #2563eb;
+  border-color: #0369a1;
 }
 
 .chevron {
@@ -290,8 +290,8 @@
 }
 
 .checkbox:checked {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #0369a1;
+  border-color: #0369a1;
 }
 
 .checkbox:checked::after {
@@ -334,7 +334,7 @@
   justify-content: center;
   gap: 0.625rem;
   padding: 0.875rem 1.75rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #014fc8 0%, #c33bf8 100%);
   color: white;
   border: none;
   border-radius: 10px;

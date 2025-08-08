@@ -134,13 +134,22 @@ export const MedicineListItem: React.FC<MedicineListItemProps> = ({
       {/* Price and Status */}
       <div className={styles.actionSection}>
         <div className={styles.priceContainer}>
-          <span className={styles.aedLabel}>AED</span>
-          <span className={styles.price}>{formatPrice(medicine.price)}</span>
+          <div className={styles.mainPriceRow}>
+            <span className={styles.aedLabel}>AED</span>
+            <span className={styles.price}>{formatPrice(medicine.packagePriceToPharmacy || medicine.price)}</span>
+            <span className={styles.priceLabel}>Package Markup</span>
+          </div>
+          {medicine.packagePriceToPublic && medicine.packagePriceToPublic !== (medicine.packagePriceToPharmacy || medicine.price) && (
+            <div className={styles.publicPriceRow}>
+              <span className={styles.publicPriceLabel}>Public:</span>
+              <span className={styles.publicPrice}>{formatPrice(medicine.packagePriceToPublic)}</span>
+            </div>
+          )}
         </div>
         
-        {medicine.inStock && (
+        {/* {medicine.inStock && (
           <span className={styles.inStock}>In Stock</span>
-        )}
+        )} */}
         
         {/* Expand Button */}
         {onExpand && (

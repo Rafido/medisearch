@@ -93,7 +93,7 @@
 }
 
 .thiqaLabel {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #0F4C75, #0A3D5C);
   color: white;
 }
 
@@ -183,8 +183,22 @@
 
 .priceContainer {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.mainPriceRow {
+  display: flex;
   align-items: center;
   gap: 3px;
+}
+
+.publicPriceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
 }
 
 .aedLabel {
@@ -199,9 +213,31 @@
 
 .price {
   font-family: var(--font-primary);
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   color: var(--success-color);
+  text-shadow: 0 1px 2px rgba(16, 185, 129, 0.2);
+}
+
+.priceLabel {
+  font-size: 0.6rem;
+  color: var(--success-color);
+  font-weight: 600;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.publicPriceLabel {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.publicPrice {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
 }
 
 .inStock {
