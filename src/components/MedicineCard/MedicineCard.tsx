@@ -106,7 +106,7 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
             
             {/* Price to Public - Right Bottom */}
             <div className={styles.publicPrice}>
-              <span className={styles.publicPriceLabel}>Public:</span>
+              <span className={styles.publicPriceLabel}>Price to Public:</span>
               <span className={styles.publicPriceValue}>
                 AED {(medicine.packagePriceToPublic || medicine.price || 0).toFixed(2)}
               </span>

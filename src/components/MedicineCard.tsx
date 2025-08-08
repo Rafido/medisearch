@@ -103,7 +103,7 @@ export const MedicineCard: React.FC<MedicineCardProps> = ({
             
             {/* Price to Public - Right */}
             <div className={styles.publicPriceRow}>
-              <span className={styles.publicPriceLabel}>Public:</span>
+              <span className={styles.publicPriceLabel}>Price to Public:</span>
               <span className={styles.publicPrice}>{formatPrice(medicine.packagePriceToPublic || medicine.price || 0)}</span>
             </div>
           </div>
