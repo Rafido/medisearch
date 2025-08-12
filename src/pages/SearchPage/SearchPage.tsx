@@ -328,7 +328,7 @@ const SearchPage = () => {
       let finalResults = genericResults;
       if (selectedDosageForm !== 'all') {
         finalResults = finalResults.filter(med => 
-          med.dosageForm?.toLowerCase() === selectedDosageForm.toLowerCase()
+          med.dosageForm?.trim().toLowerCase() === selectedDosageForm.toLowerCase()
         );
       }
       if (selectedDistributor !== 'all') {
@@ -377,7 +377,7 @@ const SearchPage = () => {
     let finalResults = initialResults;
     if (selectedDosageForm !== 'all') {
       finalResults = finalResults.filter(medicine => 
-        medicine.dosageForm?.toLowerCase() === selectedDosageForm.toLowerCase()
+        medicine.dosageForm?.trim().toLowerCase() === selectedDosageForm.toLowerCase()
       );
     }
     if (selectedDistributor !== 'all') {
@@ -428,7 +428,7 @@ const SearchPage = () => {
       // Apply dosage form filter
       if (formFilter !== 'all') {
         filteredResults = filteredResults.filter(medicine => 
-          medicine.dosageForm?.toLowerCase() === formFilter.toLowerCase()
+          medicine.dosageForm?.trim().toLowerCase() === formFilter.toLowerCase()
         );
       }
       
@@ -617,7 +617,7 @@ const SearchPage = () => {
                             <option value="all">All Forms ({unfilteredMedicines.length})</option>
                             {uniqueDosageForms.map(form => {
                               const count = unfilteredMedicines.filter(med => 
-                                med.dosageForm?.toLowerCase() === form.toLowerCase()
+                                med.dosageForm?.trim().toLowerCase() === form.toLowerCase()
                               ).length;
                               return (
                                 <option key={form} value={form}>

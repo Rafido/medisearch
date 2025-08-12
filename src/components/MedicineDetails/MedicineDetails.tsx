@@ -86,12 +86,10 @@ const MedicineDetails: React.FC<MedicineDetailsProps> = ({ medicine, onBack }) =
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Package Markup</span>
                 <span className={styles.priceValue}>
-                  {(() => {
-                    const publicPrice = medicine.packagePriceToPublic || 0;
-                    const pharmacyPrice = medicine.packagePriceToPharmacy || 0;
-                    const markup = publicPrice - pharmacyPrice;
-                    return markup > 0 ? `AED ${markup.toFixed(2)}` : 'None';
-                  })()}
+                  {medicine.packageMarkup && medicine.packageMarkup > 0 
+                    ? `AED ${medicine.packageMarkup.toFixed(2)}` 
+                    : ''
+                  }
                 </span>
               </div>
               

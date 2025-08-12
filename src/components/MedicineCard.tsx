@@ -92,12 +92,10 @@ export const MedicineCard: React.FC<MedicineCardProps> = ({
             <div className={styles.mainPriceRow}>
               <span className={styles.aedLabel}>Package Markup</span>
               <span className={styles.price}>
-                {(() => {
-                  const publicPrice = medicine.packagePriceToPublic || 0;
-                  const pharmacyPrice = medicine.packagePriceToPharmacy || 0;
-                  const markup = publicPrice - pharmacyPrice;
-                  return markup > 0 ? formatPrice(markup) : 'None';
-                })()}
+                {medicine.packageMarkup && medicine.packageMarkup > 0 
+                  ? formatPrice(medicine.packageMarkup) 
+                  : ''
+                }
               </span>
             </div>
             

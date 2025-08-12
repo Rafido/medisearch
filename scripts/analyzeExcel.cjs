@@ -13,11 +13,11 @@ function analyzeExcelFile() {
   }
 
   try {
-    const filePath = path.join(process.cwd(), 'public', 'Drugs.xlsx');
+    const filePath = path.join(process.cwd(), 'public', 'Drugs_latest.xlsx');
     
     // Check if file exists
     if (!fs.existsSync(filePath)) {
-      log('Drugs.xlsx file not found in public directory');
+      log('Drugs_latest.xlsx file not found in public directory');
       return;
     }
 

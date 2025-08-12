@@ -7,12 +7,12 @@ function convertExcelToJson() {
   try {
     console.log('🔄 Converting Drugs.xlsx to JSON...');
     
-    const excelPath = path.join(process.cwd(), 'public', 'Drugs.xlsx');
+    const excelPath = path.join(process.cwd(), 'public', 'Drugs_latest.xlsx');
     const jsonPath = path.join(process.cwd(), 'public', 'medicines.json');
     
     // Check if Excel file exists
     if (!fs.existsSync(excelPath)) {
-      console.error('❌ Drugs.xlsx file not found in public directory');
+      console.error('❌ Drugs_latest.xlsx file not found in public directory');
       return;
     }
 
@@ -43,12 +43,17 @@ function convertExcelToJson() {
         // Determine category based on dosage form or generic name
         const category = determineDrugCategory(row['Dosage Form'], row['Generic Name']);
         
-        // Determine insurance coverage (placeholder logic - adjust based on your business rules)
+        // Determine insurance coverage using actual Excel columns
         const insurancePlan = row['Insurance Plan'] || '';
-        const uppScope = insurancePlan.toLowerCase().includes('upp') || 
-                        (row['Generic Name'] || '').toLowerCase().includes('homeopathy') ? false : Math.random() > 0.7;
-        const thiqa = insurancePlan.toLowerCase().includes('thiqa') || Math.random() > 0.6;
-        const basic = insurancePlan.toLowerCase().includes('basic') || Math.random() > 0.8;
+        const uppScope = (row['UPP Scope'] || '').toLowerCase() === 'yes';
+        const thiqaFormulary = (row['Included in Thiqa/ ABM - other than 1&7- Drug Formulary'] || '').toLowerCase() === 'yes';
+        const basicFormulary = (row['Included In Basic Drug Formulary'] || '').toLowerCase() === 'yes';
+        const abm1Formulary = (row['Included In ABM 1 Drug Formulary'] || '').toLowerCase() === 'yes';
+        const abm7Formulary = (row['Included In ABM 7 Drug Formulary'] || '').toLowerCase() === 'yes';
+        
+        // Set thiqa and basic flags based on formulary inclusion
+        const thiqa = thiqaFormulary;
+        const basic = basicFormulary;
         
         // Calculate priority score
         let priorityScore = 0;
@@ -64,6 +69,12 @@ function convertExcelToJson() {
         const packagePriceToPharmacy = parseFloat(row['Package Price to Pharmacy'] || '0') || 0;
         const unitPriceToPublic = parseFloat(row['Unit Price to Public'] || '0') || 0;
         const unitPriceToPharmacy = parseFloat(row['Unit Price to Pharmacy'] || '0') || 0;
+        
+        // Use actual Package Markup from Excel only - don't calculate if blank
+        let packageMarkup = parseFloat(row['Package Markup'] || '0') || 0;
+        
+        // Use actual Unit Markup from Excel only - don't calculate if blank
+        let unitMarkup = parseFloat(row['Unit Markup'] || '0') || 0;
 
         const medicine = {
           // Core fields
@@ -95,11 +106,19 @@ function convertExcelToJson() {
           packagePriceToPharmacy,
           unitPriceToPublic,
           unitPriceToPharmacy,
+          packageMarkup,
+          unitMarkup,
           status: row['Status'] || '',
           deleteEffectiveDate: row['Delete Effective Date'] || '',
           lastChangeDate: row['Last Change Date'] || 0,
           agentName: row['Agent Name'] || '',
           manufacturerName: row['Manufacturer Name'] || '',
+          
+          // Formulary details
+          thiqaFormulary,
+          basicFormulary,
+          abm1Formulary,
+          abm7Formulary,
         };
         
         return medicine;

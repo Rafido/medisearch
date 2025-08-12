@@ -6,119 +6,184 @@
 
 🎯 DETAILED ANALYSIS OF "Drugs" SHEET
 ==================================================
-📊 Total Records: 17354
+📊 Total Records: 21431
 
 �️  Available Fields:
   1. Drug Code
-  2. Greenrain Code
-  3. Insurance Plan
-  4. Package Name
-  5. Generic Code
-  6. Generic Name
-  7. Strength
-  8. Dosage Form
-  9. Package Size
-  10. Dispense Mode
-  11. Package Price to Public
-  12. Package Price to Pharmacy
-  13. Unit Price to Public
-  14. Unit Price to Pharmacy
-  15. Status
-  16. Delete Effective Date
-  17. Last Change Date
-  18. Agent Name
-  19. Manufacturer Name
+  2. Insurance Plan
+  3. Package Name
+  4. Generic Code
+  5. Generic Name
+  6. Strength
+  7. Dosage Form
+  8. Package Size
+  9. Dispense Mode
+  10. Package Price to Public
+  11. Package Price to Pharmacy
+  12. Unit Price to Public
+  13. Unit Price to Pharmacy
+  14. Status
+  15. Delete Effective Date
+  16. Last Change Date
+  17. Agent Name
+  18. Manufacturer Name
+  19. Insurance Coverage For Government Funded Program
+  20. UPP Scope
+  21. Included in Thiqa/ ABM - other than 1&7- Drug Formulary
+  22. Included In Basic Drug Formulary
+  23. Included In ABM 1 Drug Formulary
+  24. Included In ABM 7 Drug Formulary
+  25. Unit Markup
+  26. Package Markup
+  27. Thiqa Max. Reimbursement Price (Package)
+  28. Thiqa co-pay amount (package)
+  29. Basic co-pay amount (package)
+  30. UPP Effective Date
+  31. UPP Updated Date
+  32. UPP Expiry Date
 
 📋 First Record Sample:
 {
-  "Drug Code": "D98-2596-00001-01",
-  "Greenrain Code": "2077-5530-001",
-  "Insurance Plan": "NA",
-  "Package Name": "IRICAR",
-  "Generic Code": "00001",
-  "Generic Name": "(Homeopathy)",
-  "Strength": "Combination",
-  "Dosage Form": "Cream",
-  "Package Size": "50g",
-  "Dispense Mode": "",
-  "Package Price to Public": 48,
-  "Package Price to Pharmacy": 36,
-  "Unit Price to Public": 48,
-  "Unit Price to Pharmacy": 36,
+  "Drug Code": "R80-6962-07034-01",
+  "Insurance Plan": "",
+  "Package Name": "JINARC",
+  "Generic Code": "07034",
+  "Generic Name": "Tolvaptan",
+  "Strength": "60 & 30 mg",
+  "Dosage Form": " Tablets",
+  "Package Size": "56s",
+  "Dispense Mode": "Prescription Only Medicine",
+  "Package Price to Public": 21284.2,
+  "Package Price to Pharmacy": 18500,
+  "Unit Price to Public": 380.07,
+  "Unit Price to Pharmacy": 330.35,
   "Status": "Active",
   "Delete Effective Date": "",
-  "Last Change Date": 42529,
-  "Agent Name": "Ultra Medical Store (Ultramed)",
-  "Manufacturer Name": "Deutsche Homoopathie Union, GERMANY"
+  "Last Change Date": 43513.5,
+  "Agent Name": "ROYAL PHARMACEUTICAL",
+  "Manufacturer Name": "Otsuka, NETHERLANDS",
+  "Insurance Coverage For Government Funded Program": "",
+  "UPP Scope": "No",
+  "Included in Thiqa/ ABM - other than 1&7- Drug Formulary": "Yes",
+  "Included In Basic Drug Formulary": "No",
+  "Included In ABM 1 Drug Formulary": "No",
+  "Included In ABM 7 Drug Formulary": "No",
+  "Unit Markup": "",
+  "Package Markup": "",
+  "Thiqa Max. Reimbursement Price (Package)": "",
+  "Thiqa co-pay amount (package)": "",
+  "Basic co-pay amount (package)": "",
+  "UPP Effective Date": "",
+  "UPP Updated Date": "",
+  "UPP Expiry Date": ""
 }
 
 � Additional Sample Records:
 Record 2:
 {
-  "Drug Code": "C59-4936-00002-01",
-  "Greenrain Code": "2089-6659-001",
-  "Insurance Plan": "NA",
-  "Package Name": "SPASCUPREEL S",
-  "Generic Code": "00002",
-  "Generic Name": "(Homeopathy)",
-  "Strength": "Combination",
-  "Dosage Form": "Rectal Suppositories",
-  "Package Size": "12 Suppositories",
-  "Dispense Mode": "",
-  "Package Price to Public": 40,
-  "Package Price to Pharmacy": 30,
-  "Unit Price to Public": 3.33,
-  "Unit Price to Pharmacy": 2.5,
+  "Drug Code": "R80-6962-07035-01",
+  "Insurance Plan": "",
+  "Package Name": "JINARC",
+  "Generic Code": "07035",
+  "Generic Name": "Tolvaptan",
+  "Strength": "45 & 15 mg",
+  "Dosage Form": " Tablets",
+  "Package Size": "56s",
+  "Dispense Mode": "Prescription Only Medicine",
+  "Package Price to Public": 22167.6,
+  "Package Price to Pharmacy": 21112,
+  "Unit Price to Public": 395.85,
+  "Unit Price to Pharmacy": 377,
   "Status": "Active",
   "Delete Effective Date": "",
-  "Last Change Date": 41129,
-  "Agent Name": "The Polarizer for Medical & Chemical Supplies",
-  "Manufacturer Name": "Biologische Helmitterl Heel GmbH, GERMANY"
+  "Last Change Date": 44502.5,
+  "Agent Name": "ROYAL PHARMACEUTICAL",
+  "Manufacturer Name": "Otsuka, NETHERLANDS",
+  "Insurance Coverage For Government Funded Program": "",
+  "UPP Scope": "No",
+  "Included in Thiqa/ ABM - other than 1&7- Drug Formulary": "Yes",
+  "Included In Basic Drug Formulary": "No",
+  "Included In ABM 1 Drug Formulary": "No",
+  "Included In ABM 7 Drug Formulary": "No",
+  "Unit Markup": "",
+  "Package Markup": "",
+  "Thiqa Max. Reimbursement Price (Package)": "",
+  "Thiqa co-pay amount (package)": "",
+  "Basic co-pay amount (package)": "",
+  "UPP Effective Date": "",
+  "UPP Updated Date": "",
+  "UPP Expiry Date": ""
 }
 
 Record 3:
 {
-  "Drug Code": "G32-4388-00003-01",
-  "Greenrain Code": "2411-6841-001",
-  "Insurance Plan": "NA",
-  "Package Name": "PULMO HEVERT",
-  "Generic Code": "00003",
-  "Generic Name": "(Homeopathy)",
-  "Strength": "Combination",
-  "Dosage Form": "Tablets",
-  "Package Size": "40 Tablets",
-  "Dispense Mode": "",
-  "Package Price to Public": 35,
-  "Package Price to Pharmacy": 26.25,
-  "Unit Price to Public": 0.88,
-  "Unit Price to Pharmacy": 0.66,
+  "Drug Code": "R81-4709-07036-01",
+  "Insurance Plan": "",
+  "Package Name": "SAMSCA",
+  "Generic Code": "07036",
+  "Generic Name": "Tolvaptan",
+  "Strength": "30 mg",
+  "Dosage Form": " Tablets",
+  "Package Size": "10s",
+  "Dispense Mode": "Prescription Only Medicine",
+  "Package Price to Public": 4643,
+  "Package Price to Pharmacy": 4260,
+  "Unit Price to Public": 464.3,
+  "Unit Price to Pharmacy": 426,
   "Status": "Active",
   "Delete Effective Date": "",
-  "Last Change Date": 41346,
-  "Agent Name": "Ultra Medical Store (Ultramed)",
-  "Manufacturer Name": "Hevert-Arzneimittel GmbH & Co. KG, GERMANY"
+  "Last Change Date": 45498.5,
+  "Agent Name": "GTE MEDICAL PHARMA",
+  "Manufacturer Name": "Otsuka Pharmaceutical, CANADA",
+  "Insurance Coverage For Government Funded Program": "",
+  "UPP Scope": "No",
+  "Included in Thiqa/ ABM - other than 1&7- Drug Formulary": "Yes",
+  "Included In Basic Drug Formulary": "No",
+  "Included In ABM 1 Drug Formulary": "No",
+  "Included In ABM 7 Drug Formulary": "No",
+  "Unit Markup": "",
+  "Package Markup": "",
+  "Thiqa Max. Reimbursement Price (Package)": "",
+  "Thiqa co-pay amount (package)": "",
+  "Basic co-pay amount (package)": "",
+  "UPP Effective Date": "",
+  "UPP Updated Date": "",
+  "UPP Expiry Date": ""
 }
 
 Record 4:
 {
-  "Drug Code": "C59-2264-00003-01",
-  "Greenrain Code": "2089-6655-001",
-  "Insurance Plan": "NA",
-  "Package Name": "GRIPP-HEEL",
-  "Generic Code": "00003",
-  "Generic Name": "(Homeopathy)",
-  "Strength": "Combination",
-  "Dosage Form": "Tablets",
-  "Package Size": "50 Tablets Plastic Bottle",
-  "Dispense Mode": "",
-  "Package Price to Public": 42,
-  "Package Price to Pharmacy": 33,
-  "Unit Price to Public": 0.84,
-  "Unit Price to Pharmacy": 0.66,
+  "Drug Code": "R82-0711-00819-01",
+  "Insurance Plan": "",
+  "Package Name": "BUSPIRONE",
+  "Generic Code": "00819",
+  "Generic Name": "Buspirone",
+  "Strength": "5 mg",
+  "Dosage Form": " Tablets",
+  "Package Size": "100s",
+  "Dispense Mode": "Semi-Controlled Drug",
+  "Package Price to Public": 68,
+  "Package Price to Pharmacy": 59,
+  "Unit Price to Public": 0.67,
+  "Unit Price to Pharmacy": 0.59,
   "Status": "Active",
   "Delete Effective Date": "",
-  "Last Change Date": 41129,
-  "Agent Name": "The Polarizer for Medical & Chemical Supplies",
-  "Manufacturer Name": "Biologische Helmitterl Heel GmbH, GERMANY"
+  "Last Change Date": 43668.5,
+  "Agent Name": "PHARMALINK",
+  "Manufacturer Name": "Accord Healthcare LTD, U.S.A",
+  "Insurance Coverage For Government Funded Program": "",
+  "UPP Scope": "No",
+  "Included in Thiqa/ ABM - other than 1&7- Drug Formulary": "Yes",
+  "Included In Basic Drug Formulary": "No",
+  "Included In ABM 1 Drug Formulary": "No",
+  "Included In ABM 7 Drug Formulary": "No",
+  "Unit Markup": "",
+  "Package Markup": "",
+  "Thiqa Max. Reimbursement Price (Package)": "",
+  "Thiqa co-pay amount (package)": "",
+  "Basic co-pay amount (package)": "",
+  "UPP Effective Date": "",
+  "UPP Updated Date": "",
+  "UPP Expiry Date": ""
 }
 

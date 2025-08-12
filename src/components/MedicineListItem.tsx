@@ -136,12 +136,20 @@ export const MedicineListItem: React.FC<MedicineListItemProps> = ({
         <div className={styles.priceContainer}>
           <div className={styles.mainPriceRow}>
             <span className={styles.aedLabel}>AED</span>
-            <span className={styles.price}>{formatPrice(medicine.packagePriceToPharmacy || medicine.price)}</span>
+            <span className={styles.price}>
+              {medicine.packageMarkup && medicine.packageMarkup > 0 
+                ? formatPrice(medicine.packageMarkup) 
+                : (medicine.price && medicine.price > 0 
+                  ? formatPrice(medicine.price)
+                  : ""
+                )
+              }
+            </span>
             <span className={styles.priceLabel}>Package Markup</span>
           </div>
-          {medicine.packagePriceToPublic && medicine.packagePriceToPublic !== (medicine.packagePriceToPharmacy || medicine.price) && (
+          {medicine.packagePriceToPublic && medicine.packagePriceToPublic > 0 && (
             <div className={styles.publicPriceRow}>
-              <span className={styles.publicPriceLabel}>Public:</span>
+              <span className={styles.publicPriceLabel}>Price to Public:</span>
               <span className={styles.publicPrice}>{formatPrice(medicine.packagePriceToPublic)}</span>
             </div>
           )}
